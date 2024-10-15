@@ -12,3 +12,13 @@
   width: 300px;
   height: 300px;
 }
+/* Add this CSS to your ViewContent.css or a relevant stylesheet */
+.scrollable {
+  max-height: 80vh; /* Adjust the height as needed */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers */
+}

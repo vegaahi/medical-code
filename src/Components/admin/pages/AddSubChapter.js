@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import api from "../../../api";
 
 const AddSubChapter = () => {
@@ -9,6 +11,30 @@ const AddSubChapter = () => {
   const [content, setContent] = useState("");
   const [alert, setAlert] = useState({ type: "", message: "" });
   const [showAlert, setShowAlert] = useState(false);
+
+  // Quill toolbar options
+  const toolbarOptions = [
+    [{ font: [] }], // Font family dropdown
+    [{ size: ["small", false, "large", "huge"] }], // Font size
+    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers
+    ["bold", "italic", "underline", "strike"], // Bold, italic, underline, strikethrough
+    [{ color: [] }, { background: [] }], // Text and background color
+    [{ align: [] }], // Align text (left, center, right, justify)
+    ["blockquote", "code-block"], // Blockquote and code block
+    [{ list: "ordered" }, { list: "bullet" }], // Ordered and unordered lists
+    [{ script: "sub" }, { script: "super" }], // Subscript and superscript
+    ["link", "image", "video"], // Links, images, and videos
+    ["clean"], // Remove formatting
+  ];
+
+  const modules = {
+    toolbar: toolbarOptions,
+  };
+
+  // Properly handle the Quill content change
+  const handleChange = (value) => {
+    setContent(value);
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -118,19 +144,12 @@ const AddSubChapter = () => {
         </div>
 
         {/* Content Field */}
-        <div className="form-group mt-3">
-          <label htmlFor="content">Subchapter Content</label>
-          <textarea
-            className="form-control"
-            id="content"
-            placeholder="Enter subchapter content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            rows="5"
-          />
-        </div>
-
+        <ReactQuill
+          theme="snow"
+          value={content}
+          onChange={handleChange}
+          modules={modules}
+        />
         {/* Submit Button */}
         <button type="submit" className="btn btn-primary mt-4">
           Add Subchapter
