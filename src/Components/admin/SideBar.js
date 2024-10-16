@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import { FaBars, FaFont, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
 import {
   FaBookMedical,
   FaBookOpen,
@@ -129,6 +129,11 @@ const routes = [
         path: "/settings/billing",
         name: "Billing",
         icon: <FaMoneyBill />,
+      },
+      {
+        path: "settings/fonts",
+        name: "Fonts",
+        icon: <FaFont />,
       },
     ],
   },

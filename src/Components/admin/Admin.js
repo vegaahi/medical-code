@@ -19,6 +19,7 @@ import UpdateImage from "./pages/UpdateImage";
 import GetAllChapters from "../GetAllChapters";
 
 import "../../css/Admin.css";
+import Fonts from "./pages/Fonts";
 
 function Admin() {
   return (
@@ -40,6 +41,7 @@ function Admin() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/order" element={<Order />} />
         <Route path="/settings" element={<Setting />} />
+        <Route path="/fonts" element={<Fonts />} />
         <Route path="*" element={<div>404 - Page not found</div>} />
       </Routes>
     </SideBar>

@@ -15,19 +15,19 @@ const Landing = () => {
         <Cards
           icon={<i className="fa-solid fa-unlock fa-5x text-white p-3"></i>}
           name="FULL ACCESS"
-          cardtext="Some quick example text to build on the card title and make up the bulk of the card's content."
+          cardtext="Unlock unlimited access to a wealth of resources designed to enhance your learning experience.  "
           readmore="Read more"
         />
         <Cards
           icon={<i className="fa-solid fa-money-bill fa-5x text-white p-3"></i>}
           name="MONTHLY SUBSCRIPTION"
-          cardtext="Some quick example text to build on the card title and make up the bulk of the card's content."
+          cardtext="Subscribe monthly to gain flexible access to all our premium content.Enjoy the freedom to learn at your own pace"
           readmore="Read more"
         />
         <Cards
           icon={<i className="fa-solid fa-file fa-5x text-white p-3"></i>}
           name="BUY A CHAPTER"
-          cardtext="Some quick example text to build on the card title and make up the bulk of the card's content."
+          cardtext="Purchase individual chapters to gain access to focused content tailored to your learning needs, our chapter purchase option offers flexibility and value"
           readmore="Read more"
         />
       </div>

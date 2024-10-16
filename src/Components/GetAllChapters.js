@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/GetAllChapters.css'; // Import custom CSS
 
 function GetAllChapters() {
   const [chapters, setChapters] = useState([]);
@@ -22,24 +23,41 @@ function GetAllChapters() {
       });
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (loading)
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+
+  if (error) return <div className="alert alert-danger">Error: {error.message}</div>;
 
   return (
-    <div>
-      <h1>Chapters</h1>
-      <ul>
-        {chapters.map((chapter) => (
-          <li
-            key={chapter.id}
-            onClick={() =>
-              navigate(`/admin/viewContent/${chapter.chapterNumber}`)
-            }
-          >
-            {`Chapter ${chapter.chapterNumber}: ${chapter.title}`}
-          </li>
-        ))}
-      </ul>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Chapters</h1>
+      <div className="ag-format-container">
+        <div className="ag-courses_box" style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+          {chapters.map((chapter) => (
+            <div className="ag-courses_item" key={chapter.id}>
+              <a
+                className="ag-courses-item_link"
+                onClick={() => navigate(`/admin/viewContent/${chapter.chapterNumber}`)}
+              >
+                <div className="ag-courses-item_bg"></div> {/* Background circle */}
+                <div className="ag-courses-item_title">{`Chapter ${chapter.chapterNumber}`}</div>
+                <div className="ag-courses-item_date-box">
+                  <span className="ag-courses-item_date">{chapter.title}</span>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
