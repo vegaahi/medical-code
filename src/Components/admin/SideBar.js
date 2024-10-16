@@ -131,7 +131,7 @@ const routes = [
         icon: <FaMoneyBill />,
       },
       {
-        path: "settings/fonts",
+        path: "fonts",
         name: "Fonts",
         icon: <FaFont />,
       },
