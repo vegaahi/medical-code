@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Assuming you are using React Router
+// import { useNavigate } from "react-router-dom"; // Assuming you are using React Router
+import api from "../../../api";
 
 const DeleteSubChapter = () => {
   const [chapterNumber, setChapterNumber] = useState(""); // State to hold the chapter number
-  const [bookNumber, setBookNumber] = useState(""); // State to hold the book number
   const [subChapterNumber, setSubChapterNumber] = useState(""); // State to hold the subchapter number
-  const [subChapterContent, setSubChapterContent] = useState(""); // State to hold the subchapter content
-  const navigate = useNavigate(); // Hook for programmatic navigation
+  // const navigate = useNavigate(); // Hook for programmatic navigation
+  
+  
 
-  // Array of books for the dropdown
-  const books = ["Book 1", "Book 2", "Book 3"];
-
+ 
   // Handle subchapter deletion
   const handleDelete = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -22,20 +21,21 @@ const DeleteSubChapter = () => {
 
     if (window.confirm("Are you sure you want to delete this subchapter?")) {
       try {
-        const response = await fetch(`/api/subchapters/${subChapterNumber}`, {
+        const response = await api.delete(`/subchapter/TEXT/${chapterNumber}/${subChapterNumber}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
         });
 
-        if (!response.ok) {
+        if (response.status!==200) {
           throw new Error("Failed to delete subchapter");
         }
 
         console.log("Subchapter deleted successfully");
-        // Redirect or update UI after deletion
-        navigate("/subchapters"); // Assuming this route lists all subchapters
+        alert("Subchapter deleted successfully");
+        setChapterNumber("");
+        setSubChapterNumber("");
       } catch (error) {
         console.error("Error deleting subchapter:", error);
         alert("Error deleting subchapter. Please try again.");
@@ -61,25 +61,7 @@ const DeleteSubChapter = () => {
           />
         </div>
 
-        {/* Book Number (Select Field) */}
-        <div className="form-group mt-3">
-          <label htmlFor="bookNumber">Book Number</label>
-          <select
-            className="form-control"
-            id="bookNumber"
-            value={bookNumber}
-            onChange={(e) => setBookNumber(e.target.value)}
-            required
-          >
-            <option value="">Select a book</option>
-            {books.map((book, index) => (
-              <option key={index} value={book}>
-                {book}
-              </option>
-            ))}
-          </select>
-        </div>
-
+       
         {/* Subchapter Number Field */}
         <div className="form-group mt-3">
           <label htmlFor="subChapterNumber">Subchapter Number</label>
@@ -94,19 +76,7 @@ const DeleteSubChapter = () => {
           />
         </div>
 
-        {/* Subchapter Content Field */}
-        <div className="form-group mt-3">
-          <label htmlFor="subChapterContent">Subchapter Content</label>
-          <textarea
-            className="form-control"
-            id="subChapterContent"
-            placeholder="Enter subchapter content"
-            value={subChapterContent}
-            onChange={(e) => setSubChapterContent(e.target.value)}
-            required
-            rows="5"
-          />
-        </div>
+       
 
         {/* Delete Button */}
         <button type="submit" className="btn btn-danger mt-4">

@@ -1,0 +1,150 @@
+/* GetAllChapters.css */
+.chapter-container {
+    max-height: 500px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    overflow: hidden; /* Prevent overflow */
+}
+
+.chapter-container::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+.ag-courses_box {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 0;
+}
+
+.ag-courses_item {
+    flex-basis: calc(33.33333% - 30px); /* Adjust card width */
+    margin: 0 15px 30px;
+    overflow: hidden;
+    border-radius: 28px;
+}
+
+.ag-courses-item_link {
+    display: block;
+    padding: 30px 20px;
+    background-color: #121212; /* Background color for card */
+    position: relative;
+    text-decoration: none; /* Remove underline from link */
+}
+
+.ag-courses-item_link:hover,
+.ag-courses-item_link:hover .ag-courses-item_date {
+    color: #FFF; /* Change text color on hover */
+}
+
+.ag-courses-item_link:hover .ag-courses-item_bg {
+    transform: scale(10); /* Scale background circle on hover */
+}
+
+.ag-courses-item_title {
+    min-height: 87px;
+    margin: 0 0 25px;
+    font-weight: bold;
+    font-size: 30px; /* Font size for title */
+    color: #FFF; /* Title color */
+    z-index: 2;
+    position: relative;
+}
+
+.ag-courses-item_date-box {
+    font-size: 18px;
+    color: #FFF;
+    z-index: 2;
+    position: relative;
+}
+
+.ag-courses-item_date {
+    font-weight: bold;
+    color: #f9b234; /* Color for date */
+    transition: color .5s ease; /* Transition for date color */
+}
+
+.ag-courses-item_bg {
+    height: 128px;
+    width: 128px;
+    background-color: #f9b234; /* Background color for hover effect */
+    z-index: 1;
+    position: absolute;
+    top: -75px;
+    right: -75px;
+    border-radius: 50%;
+    transition: all .5s ease; /* Transition for background */
+}
+
+/* Color changes for different items */
+.ag-courses_item:nth-child(2n) .ag-courses-item_bg {
+    background-color: #3ecd5e;
+}
+
+.ag-courses_item:nth-child(3n) .ag-courses-item_bg {
+    background-color: #e44002;
+}
+
+.ag-courses_item:nth-child(4n) .ag-courses-item_bg {
+    background-color: #952aff;
+}
+
+.ag-courses_item:nth-child(5n) .ag-courses-item_bg {
+    background-color: #cd3e94;
+}
+
+.ag-courses_item:nth-child(6n) .ag-courses-item_bg {
+    background-color: #4c49ea;
+}
+
+/* Responsive styles */
+@media only screen and (max-width: 979px) {
+    .ag-courses_item {
+        flex-basis: calc(50% - 30px);
+    }
+
+    .ag-courses-item_title {
+        font-size: 24px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .ag-format-container {
+        width: 96%;
+    }
+}
+
+@media only screen and (max-width: 639px) {
+    .ag-courses_item {
+        flex-basis: 100%;
+    }
+
+    .ag-courses-item_title {
+        min-height: 72px;
+        font-size: 24px;
+    }
+.ag-courses_box {
+  position: relative;
+  /* Hide scrollbar */
+  overflow: hidden; /* Hide the scrollbar */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.ag-courses_box::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.ag-courses_box {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+    .ag-courses-item_link {
+        padding: 22px 40px;
+    }
+
+    .ag-courses-item_date-box {
+        font-size: 16px;
+    }
+}
