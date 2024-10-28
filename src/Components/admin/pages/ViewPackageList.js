@@ -1,15 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../../api";
 import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
-const ViewPackageList = ({ packages = [], onDelete, onEdit }) => {
+const ViewPackageList = () => {
+  const [packages, setPackages] = useState([]);
   const navigate = useNavigate();
 
-  const handleDelete = (pkg) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete the package: ${pkg.packageName}?`);
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await api.get("/packagelist/packages");
+        setPackages(response.data);
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+      }
+    };
+
+    fetchPackages();
+  }, []);
+
+  const handleDelete = async (pkg) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the package: ${pkg.packageName}?`
+    );
     if (confirmDelete) {
-      onDelete(pkg);
+      try {
+        await api.delete(`/packagelist/delete/${pkg.packageId}`);
+        setPackages(packages.filter((p) => p.packageId !== pkg.packageId));
+      } catch (error) {
+        console.error("Error deleting package:", error);
+      }
     }
+  };
+
+  const handleEdit = (pkg) => {
+    navigate(`/admin/editpackage/${pkg.packageId}`);
   };
 
   return (
@@ -43,33 +70,38 @@ const ViewPackageList = ({ packages = [], onDelete, onEdit }) => {
                 <tr key={index}>
                   <td>{pkg.packageName}</td>
                   <td>{pkg.packageType}</td>
-                  <td>${pkg.packageAmount}</td>
-                  <td>${pkg.transactionFee}</td>
-                  <td>${pkg.totalPackageFee}</td>
-                  <td>{pkg.validityDays}</td>
+                  <td>₹{pkg.amount}</td>
+                  <td>₹{pkg.transactionFee}</td>
+                  <td>₹{pkg.totalPackageAmount}</td>
+                  <td>{pkg.validity}</td>
                   <td>{pkg.createdAt}</td>
-                  <td>
-                    <button
-                      className="btn btn-danger btn-sm me-2"
+                  <td style={{ display: "flex" }}>
+                    <motion.button
+                      className="btn btn-sm me-2"
+                      style={{ backgroundColor: "red", color: "white" }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => handleDelete(pkg)}
                     >
-                      <FaTrash /> Delete
-                    </button>
-                    <button
-                      className="btn btn-warning btn-sm"
-                      onClick={() => {
-                        onEdit(pkg);
-                        navigate("/admin/editpackage");
-                      }}
+                      <FaTrash />
+                    </motion.button>
+                    <motion.button
+                      className="btn btn-sm"
+                      style={{ backgroundColor: "orange", color: "white" }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleEdit(pkg)}
                     >
-                      <FaEdit /> Edit
-                    </button>
+                      <FaEdit />
+                    </motion.button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="text-center">No packages available</td>
+                <td colSpan="8" className="text-center">
+                  No packages available
+                </td>
               </tr>
             )}
           </tbody>

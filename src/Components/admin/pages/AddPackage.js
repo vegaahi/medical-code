@@ -1,54 +1,97 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../api";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 const AddPackage = ({ onAdd }) => {
   const [packageName, setPackageName] = useState("");
   const [packageType, setPackageType] = useState("Subscription"); // Default to "Subscription"
-  const [packageAmount, setPackageAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [transactionFee, setTransactionFee] = useState("");
   const [totalPackageAmount, setTotalPackageAmount] = useState(0); // Initialize with 0
-  const [validityDays, setValidityDays] = useState("");
+  const [validity, setValidity] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(""); // Add success state
+  const [loading, setLoading] = useState(false); // Add loading state
 
-  // Effect to update total package amount whenever packageAmount or transactionFee changes
+  // Effect to update total package amount whenever amount or transactionFee changes
   useEffect(() => {
-    const amount = parseFloat(packageAmount) || 0;
+    const parsedAmount = parseFloat(amount) || 0;
     const fee = parseFloat(transactionFee) || 0;
-    setTotalPackageAmount(amount + fee); // Update total package amount
-  }, [packageAmount, transactionFee]);
+    setTotalPackageAmount(parsedAmount + fee); // Update total package amount
+  }, [amount, transactionFee]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
     const newPackage = {
       packageName,
       packageType,
-      packageAmount: parseFloat(packageAmount),
+      amount: parseFloat(totalPackageAmount),
       transactionFee: parseFloat(transactionFee),
       totalPackageAmount: parseFloat(totalPackageAmount), // Use the correct variable name
-      validityDays: parseInt(validityDays),
-      createdAt: new Date().toLocaleString(),
+      validity: parseInt(validity),
+      // createdAt: new Date().toLocaleString(),
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/packages", newPackage);
-      onAdd(response.data); // Pass the added package to the parent component
+      await api.post("/packagelist/post", newPackage, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // onAdd(response.data); // Pass the added package to the parent component
       // Reset form fields
       setPackageName("");
       setPackageType("Subscription"); // Reset to default value
-      setPackageAmount("");
+      setTotalPackageAmount("");
       setTransactionFee("");
       setTotalPackageAmount(0); // Reset total package amount
-      setValidityDays("");
+      setValidity("");
       setError(""); // Clear error
+      setSuccess("Package added successfully!"); // Set success message
     } catch (err) {
-      setError("Error adding package. Please try again.");
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message); // Display specific error message from response
+      } else {
+        setError("Error adding package. Please try again.");
+      }
+      setSuccess(""); // Clear success message
+    } finally {
+      setLoading(false); // Set loading to false after request is complete
     }
   };
 
   return (
     <div className="container mt-5">
       <h2>Add New Package</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {error}
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setError("")}
+          ></button>
+        </div>
+      )}
+      {success && (
+        <div
+          className="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          {success}
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setSuccess("")}
+          ></button>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Package Name</label>
@@ -68,7 +111,10 @@ const AddPackage = ({ onAdd }) => {
             onChange={(e) => setPackageType(e.target.value)}
           >
             <option value="Subscription">Subscription</option>
-            <option value="NA" disabled>NA</option> {/* Second option is disabled */}
+            <option value="NA" disabled>
+              NA
+            </option>{" "}
+            {/* Second option is disabled */}
           </select>
         </div>
         <div className="mb-3">
@@ -76,8 +122,8 @@ const AddPackage = ({ onAdd }) => {
           <input
             type="number"
             className="form-control"
-            value={packageAmount}
-            onChange={(e) => setPackageAmount(e.target.value)}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             required
           />
         </div>
@@ -105,12 +151,14 @@ const AddPackage = ({ onAdd }) => {
           <input
             type="number"
             className="form-control"
-            value={validityDays}
-            onChange={(e) => setValidityDays(e.target.value)}
+            value={validity}
+            onChange={(e) => setValidity(e.target.value)}
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Add Package</button>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Adding..." : "Add Package"}
+        </button>
       </form>
     </div>
   );

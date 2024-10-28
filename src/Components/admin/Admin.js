@@ -49,7 +49,7 @@ function Admin() {
         <Route path="/subscriptions" element={<Subscription />} />
         <Route path="/packagelist" element={<ViewPackageList />} />
         <Route path="/addpackage" element={<AddPackage />} />
-        <Route path="/editpackage" element={<EditPackage />} />
+        <Route path="/editpackage/:packageId" element={<EditPackage />} />
         <Route path="*" element={<div>404 - Page not found</div>} />
       </Routes>
     </SideBar>
