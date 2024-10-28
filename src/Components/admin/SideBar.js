@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import { FaBars, FaFont, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
 import {
   FaBookMedical,
   FaBookOpen,
@@ -8,7 +8,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdList } from "react-icons/md";
 
 import { MdMessage } from "react-icons/md";
 // import { BiAnalyse, BiSearch } from "react-icons/bi";
@@ -18,6 +18,7 @@ import { BiCog } from "react-icons/bi";
 import { BsCartCheck } from "react-icons/bs";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { MdSubscriptions } from "react-icons/md";
 import SidebarMenu from "./SidebarMenu";
 
 import { FaEye } from "react-icons/fa6";
@@ -110,6 +111,19 @@ const routes = [
     icon: <BsCartCheck />,
   },
   {
+    path: "/admin/subscriptions",
+    name: "subscription",
+    icon: <MdSubscriptions />,
+  }
+  ,
+  {
+    path: "/admin/packagelist",
+    name: "packagelist",
+    icon: <MdList />,
+  }
+  ,
+ 
+  {
     path: "/admin/settings",
     name: "Setting",
     icon: <BiCog />,
@@ -129,6 +143,11 @@ const routes = [
         path: "/settings/billing",
         name: "Billing",
         icon: <FaMoneyBill />,
+      },
+      {
+        path: "fonts",
+        name: "Fonts",
+        icon: <FaFont />,
       },
     ],
   },

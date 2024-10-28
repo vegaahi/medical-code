@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from "react";
 import ReusableCard from "./DashboardCard"; // Import the reusable card component
 import PieChartComponent from "./PieChartComponent"; // Import the pie chart component
+import api from "../../../api";
 
 const AdminDashboard = () => {
-  const [userStats, setUserStats] = useState({});
+  const [userStats, setUserStats] = useState(0);
   const [orderStats, setOrderStats] = useState({});
   const [messageStats, setMessageStats] = useState({});
 
@@ -12,17 +13,18 @@ const AdminDashboard = () => {
     // Function to fetch data for users, orders, and messages
     const fetchData = async () => {
       try {
-        const usersResponse = await fetch("/api/users"); // Example endpoint
-        const ordersResponse = await fetch("/api/orders");
-        const messagesResponse = await fetch("/api/messages");
-
-        const usersData = await usersResponse.json();
-        const ordersData = await ordersResponse.json();
-        const messagesData = await messagesResponse.json();
+        const usersResponse = await api.get("/chapter/"); // Example endpoint
+        // const ordersResponse = await fetch("/api/orders");
+        // const messagesResponse = await fetch("/api/messages");
+        
+        const usersData= usersResponse.data.length;
+        // const usersData = await usersResponse.json();
+        // const ordersData = await ordersResponse.json();
+        // const messagesData = await messagesResponse.json();
 
         setUserStats(usersData);
-        setOrderStats(ordersData);
-        setMessageStats(messagesData);
+        // setOrderStats(ordersData);
+        // setMessageStats(messagesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -47,7 +49,7 @@ const AdminDashboard = () => {
           <ReusableCard
             title="Chapters"
             icon="📚"
-            count={userStats.totalChapters || 0}
+            count={userStats}
             description="Total Chapters"
           />
         </div>

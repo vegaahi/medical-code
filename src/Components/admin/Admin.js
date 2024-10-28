@@ -19,6 +19,11 @@ import UpdateImage from "./pages/UpdateImage";
 import GetAllChapters from "../GetAllChapters";
 
 import "../../css/Admin.css";
+import Fonts from "./pages/Fonts";
+import Subscription from "./pages/Subscription";
+import ViewPackageList from "./pages/ViewPackageList";
+import AddPackage from "./pages/AddPackage";
+import EditPackage from "./pages/EditPackage";
 
 function Admin() {
   return (
@@ -40,6 +45,11 @@ function Admin() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/order" element={<Order />} />
         <Route path="/settings" element={<Setting />} />
+        <Route path="/fonts" element={<Fonts />} />
+        <Route path="/subscriptions" element={<Subscription />} />
+        <Route path="/packagelist" element={<ViewPackageList />} />
+        <Route path="/addpackage" element={<AddPackage />} />
+        <Route path="/editpackage/:packageId" element={<EditPackage />} />
         <Route path="*" element={<div>404 - Page not found</div>} />
       </Routes>
     </SideBar>
