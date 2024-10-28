@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../api";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa"; // Importing FontAwesome icon
 
-const EditPackage = ({  onUpdate }) => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const EditPackage = () => {
+  const { packageId } = useParams();
+  const navigate = useNavigate(); // Initialize navigate
+
   const [packageData, setPackageData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    // Fetch the package data by ID
-    axios
-      .get(`http://localhost:8080/api/packages/${id}`)
+    // Fetch the package data by packageId
+    api
+      .get(`/packagelist/get/${packageId}`)
       .then((response) => {
-        setPackageData(response.data);  
+        setPackageData(response.data);
         setLoading(false);
       })
       .catch((err) => {
         setError("Error fetching package data.");
         setLoading(false);
       });
-  }, [id]);
+  }, [packageId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:8080/api/packages/${id}`, packageData);
-      onUpdate(response.data); // Pass the updated package to the parent component
-      navigate('/packages'); // Redirect to the packages list page
+      await api.put(`/packagelist/put/${packageId}`, packageData);
+      setSuccess("Package updated successfully.");
       setError("");
     } catch (err) {
       setError("Error updating package. Please try again.");
+      setSuccess("");
     }
   };
 
@@ -44,12 +47,39 @@ const EditPackage = ({  onUpdate }) => {
   };
 
   if (loading) return <div className="text-center">Loading...</div>;
-  if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
     <div className="container mt-5">
+      <button className="btn btn-secondary mb-3" onClick={() => navigate(-1)}>
+        <FaArrowLeft /> Back
+      </button>
       <h2>Edit Package</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {error}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setError("")}
+          ></button>
+        </div>
+      )}
+      {success && (
+        <div
+          className="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          {success}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setSuccess("")}
+          ></button>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Package Name</label>
@@ -71,7 +101,9 @@ const EditPackage = ({  onUpdate }) => {
             onChange={handleChange}
           >
             <option value="Subscription">Subscription</option>
-            <option value="NA" disabled>NA</option> {/* Second option is disabled */}
+            <option value="NA" disabled>
+              NA
+            </option>
           </select>
         </div>
         <div className="mb-3">
@@ -80,7 +112,7 @@ const EditPackage = ({  onUpdate }) => {
             type="number"
             className="form-control"
             name="packageAmount"
-            value={packageData.packageAmount}
+            value={packageData.amount}
             onChange={handleChange}
             required
           />
@@ -101,7 +133,12 @@ const EditPackage = ({  onUpdate }) => {
           <input
             type="number"
             className="form-control"
-            value={(parseFloat(packageData.packageAmount) + parseFloat(packageData.transactionFee)).toFixed(2)}
+            value={
+              (packageData.totalPackageAmount = (
+                parseFloat(packageData.amount) +
+                parseFloat(packageData.transactionFee)
+              ).toFixed(2))
+            }
             readOnly
           />
         </div>
@@ -111,12 +148,14 @@ const EditPackage = ({  onUpdate }) => {
             type="number"
             className="form-control"
             name="validityDays"
-            value={packageData.validityDays}
+            value={packageData.validity}
             onChange={handleChange}
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Update Package</button>
+        <button type="submit" className="btn btn-primary">
+          Update Package
+        </button>
       </form>
     </div>
   );
