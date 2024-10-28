@@ -71,7 +71,7 @@ function GetAllChapters() {
               <div className="d-flex justify-content-around mt-2">
                 <button
                   className="btn btn-primary"
-                  onClick={() => navigate(`/admin/updatechapter`)} // Navigate to update page
+                  onClick={() => navigate(`/admin/updatechapter/${chapter.chapterNumber}`)} // Navigate to update page
                 >
                   <i className="fas fa-edit"></i> Update
                 </button>

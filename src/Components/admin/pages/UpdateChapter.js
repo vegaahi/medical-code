@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import axios from "axios"; // Import Axios
+import { useParams } from "react-router-dom";
 import api from "../../../api";
 
 const UpdateChapter = () => {
@@ -9,7 +9,16 @@ const UpdateChapter = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertType, setAlertType] = useState("success");
 
-  // Fetch existing chapter data when the component mounts
+  const { chapterNum } = useParams();
+
+  // Set the chapterNumber based on URL parameter chapterNum
+  useEffect(() => {
+    if (chapterNum) {
+      setChapterNumber(chapterNum);
+    }
+  }, [chapterNum]);
+
+  // Fetch existing chapter data only when chapterNum is available
   useEffect(() => {
     if (chapterNumber) {
       const fetchChapter = async () => {

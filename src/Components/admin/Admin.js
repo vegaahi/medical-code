@@ -38,6 +38,7 @@ function Admin() {
         <Route path="/updateimage" element={<UpdateImage />} />
         <Route path="/updatesubchapter" element={<UpdateSubChapter />} />
         <Route path="/updatechapter" element={<UpdateChapter />} />
+        <Route path="/updatechapter/:chapterNum" element={<UpdateChapter />} />
         <Route path="/deletechapter" element={<DeleteChapter />} />
         <Route path="/deletesubchapter" element={<DeleteSubChapter />} />
         <Route path="/deleteimage" element={<DeleteImg />} />
