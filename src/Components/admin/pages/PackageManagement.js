@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import ViewPackageList from './ViewPackageList';
 import AddPackage from './AddPackage';
+import api from "../../../api";
+
 
 const PackageManagement = () => {
   const [packages, setPackages] = useState([]);
@@ -10,7 +12,7 @@ const PackageManagement = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/packages");
+        const response =api.get("/");
         setPackages(response.data);
       } catch (error) {
         console.error("Error fetching packages", error);
@@ -21,7 +23,7 @@ const PackageManagement = () => {
 
   const handleDelete = async (pkg) => {
     try {
-      await axios.delete(`http://localhost:8080/api/packages/${pkg.packageName}`);
+      await api.delete(`http://localhost:8080/api/packages/${pkg.packageName}`);
       setPackages((prev) => prev.filter((p) => p.packageName !== pkg.packageName));
     } catch (error) {
       console.error("Error deleting package", error);
