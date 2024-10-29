@@ -21,9 +21,11 @@ import GetAllChapters from "../GetAllChapters";
 import "../../css/Admin.css";
 import Fonts from "./pages/Fonts";
 import Subscription from "./pages/Subscription";
+
 import ViewPackageList from "./pages/ViewPackageList";
 import AddPackage from "./pages/AddPackage";
 import EditPackage from "./pages/EditPackage";
+import SubscriptionDetails from "./pages/SubscriptionDetails";
 
 function Admin() {
   return (
@@ -48,6 +50,7 @@ function Admin() {
         <Route path="/settings" element={<Setting />} />
         <Route path="/fonts" element={<Fonts />} />
         <Route path="/subscriptions" element={<Subscription />} />
+        <Route path="/subscriptions/:customerId" element={<SubscriptionDetails />} />
         <Route path="/packagelist" element={<ViewPackageList />} />
         <Route path="/addpackage" element={<AddPackage />} />
         <Route path="/editpackage/:packageId" element={<EditPackage />} />
