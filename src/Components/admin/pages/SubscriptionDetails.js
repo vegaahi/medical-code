@@ -1,64 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import api from '../../../api';
+
 function SubscriptionDetails() {
-    const { customerId } = useParams();
-    const [subscription, setSubscription] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const location = useLocation();
+    const sub = location.state;
+    const [subscription, setSubscription] = useState(sub); 
     const [error, setError] = useState(null);
-    const [isActive, setIsActive] = useState(true); // To track subscription status
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const response = await api.get(`/subscription-details/get/${customerId}`);
-                const data = {
-                    purchasedDate: '2024-01-01',
-                    packageName: `Package ${response.data.id}`,
-                    amount: '100.00',
-                    actualAmount: '90.00',
-                    totalAmount: '100.00',
-                    noOfDays: 30,
-                    startDate: '2024-01-01',
-                    endDate: '2024-12-31',
-                    status: 'Active'
-                };
-                setSubscription(data);
-                setIsActive(true); // Set active state on fetch
-                setError(null);
-            } catch (error) {
-                console.error("Error fetching subscription details:", error);
-                setError("Failed to fetch subscription details.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [customerId]);
-
-    const handleDeactivate = () => {
-        const confirmDeactivate = window.confirm('Are you sure you want to deactivate the plan?');
-        if (confirmDeactivate) {
-            // Logic for deactivating the plan
-            setIsActive(false); // Set subscription status to inactive
-            // Optionally: make a request to your backend to deactivate the plan
-        }
-    };
-
-    const handleActivate = () => {
+    const handleActivate = async () => {
         const confirmActivate = window.confirm('Are you sure you want to activate the plan?');
         if (confirmActivate) {
-            // Logic for activating the plan
-            setIsActive(true); // Set subscription status to active
-            // Optionally: make a request to your backend to activate the plan
+            try {
+                const updatedSub = { ...subscription, status: "Active" }; 
+                const response = await api.put(`/subscriptions/put/${subscription.id}`, updatedSub);
+                if (response.status === 200) {
+                    setSubscription(updatedSub);
+                    alert("Plan activated successfully");
+                } else {
+                    console.error('Failed to activate the plan:', response.statusText);
+                }
+            } catch (error) {
+                console.error('An error occurred while activating the plan:', error);
+            }
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    const handleDeactivate = async () => {
+        const confirmDeactivate = window.confirm('Are you sure you want to deactivate the plan?');
+        if (confirmDeactivate) {
+            try {
+                const updatedSub = { ...subscription, status: "Inactive" };
+                const response = await api.put(`/subscriptions/put/${subscription.id}`, updatedSub);
+                if (response.status === 200) {
+                    setSubscription(updatedSub);
+                    alert("Plan deactivated successfully");
+                } else {
+                    console.error('Failed to deactivate the plan:', response.statusText);
+                }
+            } catch (error) {
+                console.error('An error occurred while deactivating the plan:', error);
+            }
+        }
+    };
+
     if (error) return <div>{error}</div>;
-    if (!subscription) return <div>No subscription details found.</div>;
 
     return (
         <div className="container mt-5">
@@ -78,14 +64,6 @@ function SubscriptionDetails() {
                         <td>{subscription.amount}</td>
                     </tr>
                     <tr>
-                        <th>Actual Amount</th>
-                        <td>{subscription.actualAmount}</td>
-                    </tr>
-                    <tr>
-                        <th>Total Amount</th>
-                        <td>{subscription.totalAmount}</td>
-                    </tr>
-                    <tr>
                         <th>No of Days</th>
                         <td>{subscription.noOfDays}</td>
                     </tr>
@@ -99,12 +77,12 @@ function SubscriptionDetails() {
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>{isActive ? 'Active' : 'Deactivated'}</td>
+                        <td>{subscription.status}</td>
                     </tr>
                     <tr>
                         <th>Action</th>
                         <td>
-                            {isActive ? (
+                            {subscription.status === "Active" ? (
                                 <button className="btn btn-danger" onClick={handleDeactivate}>
                                     Deactivate Plan
                                 </button>

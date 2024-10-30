@@ -11,16 +11,23 @@ function SubscriptionTable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api.get(`/subscriptions/getallsubscriptions`);
+                const response = await api.get(`/subscriptions/getAll`);
                 
-                // Map API response to expected structure
+               
                 const mappedData = response.data.map((item) => ({
-                    package: `Package ${item.id}`,          // Dummy package name
-                    customerName: `Customer ${item.customerName}`, // Dummy customer name
-                    customerId: item.customerId,                     // Using `id` as Customer ID
-                    phoneNumber: item.phoneNumber,             // Dummy phone number
-                    endDate: item.subscriptionEndDate,                   // Dummy end date
-                    status:  item.subscriptionStatus                 // Dummy subscription status
+                    package: `Package ${item.id}`, 
+                    id:item.id,         
+                    customerName: `Customer ${item.customerName}`, 
+                    customerId: item.customerId,                     
+                    phoneNumber: item.phoneNumber,             
+                    endDate: item.endDate,                  
+                    status:  item.status,
+                    purchasedDate:item.purchasedDate,
+                    packageName:item.packageName,
+                    amount:item.amount,
+                    noOfDays:item.noOfDays,
+                    startDate:item.startDate
+                                    
                 }));
 
                 setSubscriptions(mappedData);
@@ -38,12 +45,12 @@ function SubscriptionTable() {
     const currentSubscriptions = subscriptions.slice(firstItemIndex, lastItemIndex);
     const totalPages = Math.ceil(subscriptions.length / itemsPerPage);
 
-    // Handle page change
+
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-    // Handle navigation to details page
-    const navigateToDetails = (id) => {
-        navigate(`/admin/subscriptions/${id}`);
+ 
+    const navigateToDetails = (sub) => {
+        navigate(`/admin/subscriptiondetails`,{state:sub});
     };
 
     return (
@@ -66,7 +73,7 @@ function SubscriptionTable() {
                             <tr key={index}>
                                 <td>
                                     <button
-                                        onClick={() => navigateToDetails(sub.id)}
+                                        onClick={() => navigateToDetails(sub)}
                                         className="btn btn-link"
                                     > 
                                         {sub.package}

@@ -50,7 +50,7 @@ function Admin() {
         <Route path="/settings" element={<Setting />} />
         <Route path="/fonts" element={<Fonts />} />
         <Route path="/subscriptions" element={<Subscription />} />
-        <Route path="/subscriptions/:customerId" element={<SubscriptionDetails />} />
+        <Route path="/subscriptiondetails" element={<SubscriptionDetails />} />
         <Route path="/packagelist" element={<ViewPackageList />} />
         <Route path="/addpackage" element={<AddPackage />} />
         <Route path="/editpackage/:packageId" element={<EditPackage />} />
