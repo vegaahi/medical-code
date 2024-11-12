@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 // import axios from "axios";
 import api from "../api";
+
 import { useNavigate } from "react-router-dom";
 import "../css/Login.css"; // Ensure styles for the input and error messages
+import axios from "axios";
 
 export default function Login() {
   const [details, setDetails] = useState({ username: "", password: "" });
@@ -64,15 +66,18 @@ export default function Login() {
 
     if (usernameValid && passwordValid) {
       try {
-        const response = await api.get(
-          `/getbyusername/${details.username}`
+        const response = await axios.post(
+          "http://localhost:8080/api/auth/login",
+          null,
+          {
+            params: {
+              username: details.username,
+              password: details.password,
+            },
+          }
         );
         if (response.status === 200) {
-          if (response.data.password === details.password) {
-            navigate("/admin");
-          } else {
-            alert("Login failed");
-          }
+          navigate("/admin");
         } else {
           alert("Login failed");
         }
