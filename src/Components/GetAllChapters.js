@@ -13,7 +13,7 @@ function GetAllChapters() {
   useEffect(() => {
     const fetchChapters = async () => {
       try {
-        const response = await api.get(`/chapter/`); // Fetch all chapters
+        const response = await api.get(`/chapter/`); 
         setChapters(response.data);
       } catch (err) {
         setError(err);
