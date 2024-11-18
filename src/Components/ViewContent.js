@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api";
-import { useParams,} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/ViewContent.css"; // Ensure this file contains the necessary styles
 
@@ -14,7 +14,7 @@ function ViewContent() {
 
   useEffect(() => {
     api
-      .get(`/chapter/${chapterNumber}`) // Fetch chapter details
+      .get(`/admins/chapter/${chapterNumber}`) // Fetch chapter details
       .then((response) => {
         setChapter(response.data);
         setLoading(false);
@@ -26,7 +26,10 @@ function ViewContent() {
   }, [chapterNumber]);
 
   if (loading) return <div className="text-center">Loading...</div>;
-  if (error) return <div className="text-center text-danger">Error: {error.message}</div>;
+  if (error)
+    return (
+      <div className="text-center text-danger">Error: {error.message}</div>
+    );
   if (!chapter || !chapter.subChapters) {
     return <div className="text-center">No subchapters available.</div>;
   }
@@ -99,7 +102,9 @@ function ViewContent() {
           {Array.from({ length: totalPages }, (_, index) => (
             <li className="page-item" key={index + 1}>
               <button
-                className={`page-link ${currentPage === index + 1 ? 'active' : ''}`}
+                className={`page-link ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
                 onClick={() => handlePageChange(index + 1)}
                 aria-label={`Page ${index + 1}`}
               >
@@ -141,7 +146,9 @@ function ViewContent() {
                       Subchapter: {subchapter.subchapterNumber} - Title:{" "}
                       {subchapter.subchapterTitle}
                     </h4>
-                    <p dangerouslySetInnerHTML={{ __html: subchapter.content }}></p>
+                    <p
+                      dangerouslySetInnerHTML={{ __html: subchapter.content }}
+                    ></p>
                   </>
                 ) : (
                   <>
