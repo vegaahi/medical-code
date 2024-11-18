@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-// import axios from "axios";
 import api from "../api";
-
 import { useNavigate } from "react-router-dom";
 import "../css/Login.css"; // Ensure styles for the input and error messages
-import axios from "axios";
 
 export default function Login() {
   const [details, setDetails] = useState({ username: "", password: "" });
@@ -66,16 +63,12 @@ export default function Login() {
 
     if (usernameValid && passwordValid) {
       try {
-        const response = await axios.post(
-          "http://localhost:8080/api/auth/login",
-          null,
-          {
-            params: {
-              username: details.username,
-              password: details.password,
-            },
-          }
-        );
+        const response = await api.post("/api/auth/login", null, {
+          params: {
+            username: details.username,
+            password: details.password,
+          },
+        });
         if (response.status === 200) {
           navigate("/admin");
         } else {
@@ -83,8 +76,7 @@ export default function Login() {
         }
       } catch (error) {
         console.error("There was an error!", error);
-        alert("An error occurred. Please try again.");
-        // navigate("/admin");
+        alert("Invalid credentials");
       }
     }
   };

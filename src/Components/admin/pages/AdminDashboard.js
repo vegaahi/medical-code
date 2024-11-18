@@ -13,11 +13,11 @@ const AdminDashboard = () => {
     // Function to fetch data for users, orders, and messages
     const fetchData = async () => {
       try {
-        const usersResponse = await api.get("/chapter/"); // Example endpoint
+        const usersResponse = await api.get("/admins/chapter/"); // Example endpoint
         // const ordersResponse = await fetch("/api/orders");
         // const messagesResponse = await fetch("/api/messages");
-        
-        const usersData= usersResponse.data.length;
+
+        const usersData = usersResponse.data.length;
         // const usersData = await usersResponse.json();
         // const ordersData = await ordersResponse.json();
         // const messagesData = await messagesResponse.json();
