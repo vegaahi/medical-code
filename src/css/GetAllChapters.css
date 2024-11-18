@@ -148,3 +148,31 @@
         font-size: 16px;
     }
 }
+.ag-courses_item {
+  position: relative;
+  z-index: 1;
+}
+
+.chapter-container {
+  position: relative;
+  margin-bottom: 2rem;
+  z-index: 2;
+}
+
+.chapter-container .d-flex {
+  position: relative;
+  z-index: 3;
+}
+
+/* Ensure the hover effect doesn't hide the buttons */
+.ag-courses-item_link:hover {
+  text-decoration: none;
+}
+
+.ag-courses-item_link:focus {
+  outline: none;
+}
+
+.d-flex.justify-content-around {
+  margin-top: 20px;
+}

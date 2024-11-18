@@ -13,7 +13,9 @@ function GetAllChapters() {
   useEffect(() => {
     const fetchChapters = async () => {
       try {
+
         const response = await api.get(`/admins/chapter/`); // Fetch all chapters
+
         setChapters(response.data);
       } catch (err) {
         setError(err);
@@ -27,7 +29,9 @@ function GetAllChapters() {
   const handleDelete = async (chapterNumber) => {
     if (window.confirm("Are you sure you want to delete this chapter?")) {
       try {
+
         const response = await api.delete(`/admins/chapter/${chapterNumber}`); // Delete chapter by chapter number
+
         console.log("Delete response:", response.data);
         setChapters((prevChapters) =>
           prevChapters.filter(
@@ -82,7 +86,7 @@ function GetAllChapters() {
                   <span className="ag-courses-item_date">{chapter.title}</span>
                 </div>
               </a>
-              <div className="d-flex justify-content-around mt-2">
+              <div className="d-flex justify-content-around mt-4 mb-2">
                 <button
                   className="btn btn-primary"
                   onClick={() => navigate(`/admin/updatechapter/${chapter.chapterNumber}`)} // Navigate to update page
@@ -91,7 +95,7 @@ function GetAllChapters() {
                 </button>
                 <button
                   className="btn btn-danger"
-                  onClick={() => handleDelete(chapter.chapterNumber)} // Use chapter.chapterNumber for deletion
+                  onClick={() => handleDelete(chapter.chapterNumber)}
                 >
                   <i className="fas fa-trash-alt"></i> Delete
                 </button>
