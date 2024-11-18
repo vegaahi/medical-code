@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import api from "../../../api";
 
 const UpdateChapter = () => {
-  const [chapterNumber, setChapterNumber] = useState("");
+  const [chapterNumber, setChapterNumber] = useState(""); // For input field
+  const [currentChapterNumber, setCurrentChapterNumber] = useState(""); // For API calls
   const [title, setTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertType, setAlertType] = useState("success");
 
-  const { chapterNum } = useParams();
-
-  // Set the chapterNumber based on URL parameter chapterNum
+  // Fetch chapter data only when currentChapterNumber changes
   useEffect(() => {
-    if (chapterNum) {
-      setChapterNumber(chapterNum);
-    }
-  }, [chapterNum]);
-
-  // Fetch existing chapter data only when chapterNum is available
-  useEffect(() => {
-    if (chapterNumber) {
+    if (currentChapterNumber) {
       const fetchChapter = async () => {
         try {
-          const response = await api.get(`/admins/chapter/${chapterNumber}`);
+          const response = await api.get(
+            `/admins/chapter/${currentChapterNumber}`
+          );
           const chapter = response.data;
-          setChapterNumber(chapter.chapterNumber);
           setTitle(chapter.title);
         } catch (error) {
           console.error("Error fetching chapter data:", error);
+          setAlertMessage("Error fetching chapter data. Please try again.");
+          setAlertType("danger");
+          setAlertVisible(true);
         }
       };
 
       fetchChapter();
     }
-  }, [chapterNumber]);
+  }, [currentChapterNumber]);
 
   // Handle form submission for updating the chapter
   const handleSubmit = async (e) => {
@@ -62,6 +57,12 @@ const UpdateChapter = () => {
     }
   };
 
+  // Handle fetching chapter when user presses Enter or submits
+  const handleFetchChapter = (e) => {
+    e.preventDefault();
+    setCurrentChapterNumber(chapterNumber); // Trigger API call
+  };
+
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
       <div className="container mt-5">
@@ -80,8 +81,9 @@ const UpdateChapter = () => {
             ></button>
           </div>
         )}
-        <form onSubmit={handleSubmit}>
-          {/* Chapter Number Field */}
+
+        {/* Fetch Chapter Form */}
+        <form onSubmit={handleFetchChapter}>
           <div className="form-group">
             <label htmlFor="chapterNumber">Chapter Number</label>
             <input
@@ -94,26 +96,32 @@ const UpdateChapter = () => {
               required
             />
           </div>
-
-          {/* Chapter Title Field */}
-          <div className="form-group mt-3">
-            <label htmlFor="title">Chapter Title</label>
-            <input
-              type="text"
-              className="form-control"
-              id="title"
-              placeholder="Enter chapter title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="btn btn-primary mt-4">
-            Update Chapter
+          <button type="submit" className="btn btn-secondary mt-3">
+            Fetch Chapter
           </button>
         </form>
+
+        {/* Update Chapter Form */}
+        {currentChapterNumber && (
+          <form onSubmit={handleSubmit} className="mt-4">
+            <div className="form-group">
+              <label htmlFor="title">Chapter Title</label>
+              <input
+                type="text"
+                className="form-control"
+                id="title"
+                placeholder="Enter chapter title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary mt-4">
+              Update Chapter
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

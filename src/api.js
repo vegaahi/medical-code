@@ -29,59 +29,50 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// Response Interceptor
 api.interceptors.response.use(
-  (response) => response, // Return the response if successful
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // If 401 Unauthorized, attempt token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 403 && !originalRequest._retry) {
       if (!isRefreshing) {
         isRefreshing = true;
 
         try {
-          // Make a request to refresh the token
-          const { data } = await api.post(
+          const response = await api.post(
             "/api/auth/refresh-token",
             {},
-            { withCredentials: true } // Ensure cookies are sent
+            { withCredentials: true }
           );
 
-          // If the response message is 'refreshed', notify subscribers and retry original request
-          if (data === "refreshed") {
+          if (response.status === 200) {
             console.log("Token refreshed successfully");
             isRefreshing = false;
             notifyRefreshSubscribers();
 
-            // Retry the original request since the new token is automatically handled by the browser
             originalRequest._retry = true;
             return api(originalRequest);
           } else {
-            // If no 'refreshed' message, treat it as a failure
-            throw new Error("Failed to refresh token");
+            throw new Error("Unexpected response during token refresh");
           }
         } catch (refreshError) {
+          console.error("Failed to refresh token", refreshError);
           isRefreshing = false;
           refreshSubscribers = [];
-          // If the refresh token itself is invalid, log out the user
           console.error("Refresh token expired. Logging out user.");
-          window.location.href = "/"; // Redirect to the starting or home page
+          // window.location.href = "/";
           return Promise.reject(refreshError);
         }
       }
 
-      // Add request to the queue to wait for token refresh
       return new Promise((resolve) => {
         addRefreshSubscriber(() => {
           originalRequest._retry = true;
-          resolve(api(originalRequest)); // Retry original request after token refresh
+          resolve(api(originalRequest));
         });
       });
     }
 
-    // If the error is not 401 or retry failed, reject it
     return Promise.reject(error);
   }
 );
