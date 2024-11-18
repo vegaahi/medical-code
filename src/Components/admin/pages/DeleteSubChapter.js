@@ -21,7 +21,7 @@ const DeleteSubChapter = () => {
 
     if (window.confirm("Are you sure you want to delete this subchapter?")) {
       try {
-        const response = await api.delete(`/subchapter/TEXT/${chapterNumber}/${subChapterNumber}`, {
+        const response = await api.delete(`/admins/subchapter/TEXT/${chapterNumber}/${subChapterNumber}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

@@ -23,7 +23,7 @@ const UpdateChapter = () => {
     if (chapterNumber) {
       const fetchChapter = async () => {
         try {
-          const response = await api.get(`/chapter/${chapterNumber}`);
+          const response = await api.get(`/admins/chapter/${chapterNumber}`);
           const chapter = response.data;
           setChapterNumber(chapter.chapterNumber);
           setTitle(chapter.title);
@@ -47,7 +47,7 @@ const UpdateChapter = () => {
 
     try {
       const response = await api.put(
-        `/chapter/${chapterNumber}`,
+        `/admins/chapter/${chapterNumber}`,
         updatedChapterData
       );
       console.log("Chapter updated successfully:", response.data);

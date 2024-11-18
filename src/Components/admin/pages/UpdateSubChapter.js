@@ -39,7 +39,7 @@ const UpdateSubChapter = () => {
       if (chapterNumber && subchapterNumber) {
         try {
           const response = await api.get(
-            `/subchapter/TEXT/${chapterNumber}/${subchapterNumber}`
+            `/admins/subchapter/TEXT/${chapterNumber}/${subchapterNumber}`
           );
           const { subchapterTitle, content } = response.data;
           setSubChapterTitle(subchapterTitle);
@@ -66,7 +66,7 @@ const UpdateSubChapter = () => {
 
     try {
       const response = await api.put(
-        `/subchapter/TEXT/${chapterNumber}/${subchapterNumber}`,
+        `/admins/subchapter/TEXT/${chapterNumber}/${subchapterNumber}`,
         updatedSubChapterData,
         {
           headers: {

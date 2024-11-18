@@ -13,7 +13,7 @@ function SubscriptionDetails() {
         if (confirmActivate) {
             try {
                 const updatedSub = { ...subscription, status: "Active" }; 
-                const response = await api.put(`/subscriptions/put/${subscription.id}`, updatedSub);
+                const response = await api.put(`/admins/subscriptions/put/${subscription.id}`, updatedSub);
                 if (response.status === 200) {
                     setSubscription(updatedSub);
                     alert("Plan activated successfully");

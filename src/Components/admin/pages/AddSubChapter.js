@@ -51,7 +51,7 @@ const AddSubChapter = () => {
     try {
       // Example of sending subchapter data to an API using axios
       const response = await api.post(
-        `/subchapter/text?chapterNumber=${chapterNumber}`,
+        `/admins/subchapter/text?chapterNumber=${chapterNumber}`,
         subChapterData,
         {
           headers: {

@@ -18,7 +18,7 @@ const DeleteImg = () => {
 
     if (window.confirm("Are you sure you want to delete the image for this subchapter?")) {
       try {
-        const response = await api.delete(`/subchapter/image/${chapterNumber}/${subchapterNumber}/${imageNumber}`);
+        const response = await api.delete(`/admins/subchapter/image/${chapterNumber}/${subchapterNumber}/${imageNumber}`);
         if (response.status === 200) {
           alert("Image deleted successfully!");
           // Clear the input fields after successful deletion

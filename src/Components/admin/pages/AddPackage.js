@@ -34,7 +34,7 @@ const AddPackage = ({ onAdd }) => {
     };
 
     try {
-      await api.post("/packagelist/post", newPackage, {
+      await api.post("/admins/packagelist/post", newPackage, {
         headers: {
           "Content-Type": "application/json",
         },

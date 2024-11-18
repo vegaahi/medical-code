@@ -15,7 +15,7 @@ const EditPackage = () => {
   useEffect(() => {
     // Fetch the package data by packageId
     api
-      .get(`/packagelist/get/${packageId}`)
+      .get(`/admins/packagelist/get/${packageId}`)
       .then((response) => {
         setPackageData(response.data);
         setLoading(false);
@@ -29,7 +29,7 @@ const EditPackage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/packagelist/put/${packageId}`, packageData);
+      await api.put(`/admins/packagelist/put/${packageId}`, packageData);
       setSuccess("Package updated successfully.");
       setError("");
     } catch (err) {

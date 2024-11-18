@@ -11,7 +11,7 @@ function SubscriptionTable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api.get(`/subscriptions/getAll`);
+                const response = await api.get(`/admins/subscriptions/getAll`);
                 
                
                 const mappedData = response.data.map((item) => ({
