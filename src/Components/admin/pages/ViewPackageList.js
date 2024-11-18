@@ -11,7 +11,7 @@ const ViewPackageList = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await api.get("/packagelist/packages");
+        const response = await api.get("/admins/packagelist/packages");
         setPackages(response.data);
       } catch (error) {
         console.error("Error fetching packages:", error);
@@ -27,7 +27,7 @@ const ViewPackageList = () => {
     );
     if (confirmDelete) {
       try {
-        await api.delete(`/packagelist/delete/${pkg.packageId}`);
+        await api.delete(`/admins/packagelist/delete/${pkg.packageId}`);
         setPackages(packages.filter((p) => p.packageId !== pkg.packageId));
       } catch (error) {
         console.error("Error deleting package:", error);

@@ -29,6 +29,7 @@ import SubscriptionDetails from "./pages/SubscriptionDetails";
 import ActivityTracker from "./pages/ActivityTracker";
 import CoinManager from "./pages/CoinManager";
 
+
 function Admin() {
   return (
     <SideBar>

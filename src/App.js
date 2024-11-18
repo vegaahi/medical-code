@@ -19,6 +19,7 @@ import logo from "./Assets/homeo.jpg";
 import "bootstrap/dist/css/bootstrap.css";
 
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import Customer from "./Components/customer/pages/Customer";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/admin/*" element={<Admin />} /> {/* Admin Routes */}
+        <Route path="/customer/*" element={<Customer />} /> {/* Customer Routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/TermsAndServices" element={<TermsAndServices />} />

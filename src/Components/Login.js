@@ -1,29 +1,23 @@
 import React, { useState } from "react";
-import "../css/Login.css"; // Ensure styles for the input and error messages
+import api from "../api";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import "../css/Login.css"; // Ensure styles for the input and error messages
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" });
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [details, setDetails] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState({ username: "", password: "" });
+  const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [userType, setUserType] = useState("");
   const navigate = useNavigate();
 
-  const validateEmail = (value) => {
+  const validateUsername = (value) => {
     if (!value) {
-      setErrors((prev) => ({ ...prev, email: "Email is required." }));
-      setIsEmailValid(false);
-      return false;
-    } else if (!/\S+@\S+\.\S+/.test(value)) {
-      setErrors((prev) => ({ ...prev, email: "Invalid email format." }));
-      setIsEmailValid(false);
+      setErrors((prev) => ({ ...prev, username: "Username is required." }));
+      setIsUsernameValid(false);
       return false;
     } else {
-      setErrors((prev) => ({ ...prev, email: "" }));
-      setIsEmailValid(true);
+      setErrors((prev) => ({ ...prev, username: "" }));
+      setIsUsernameValid(true);
       return true;
     }
   };
@@ -47,50 +41,42 @@ export default function Login() {
     }
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    validateEmail(e.target.value);
-  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDetails({
+      ...details,
+      [name]: value,
+    });
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    validatePassword(e.target.value);
-  };
-
-  const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
+    if (name === "username") {
+      validateUsername(value);
+    } else if (name === "password") {
+      validatePassword(value);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const emailValid = validateEmail(email);
-    const passwordValid = validatePassword(password);
+    const usernameValid = validateUsername(details.username);
+    const passwordValid = validatePassword(details.password);
 
-    if (emailValid && passwordValid) {
+    if (usernameValid && passwordValid) {
       try {
-        const response = await axios.post("https://your-api-endpoint/login", {
-          email,
-          password,
-          userType,
+        const response = await api.post("/api/auth/login", null, {
+          params: {
+            username: details.username,
+            password: details.password,
+          },
         });
-
         if (response.status === 200) {
-          // Redirect to AfterLogin
-          navigate("/AfterLogin");
+          navigate("/");
         } else {
-          setErrors((prev) => ({
-            ...prev,
-            form: response.data.message || "Login failed",
-          }));
+          alert("Login failed");
         }
       } catch (error) {
-        setErrors((prev) => ({
-          ...prev,
-          form:
-            error.response?.data?.message ||
-            "An error occurred. Please try again.",
-        }));
+        console.error("There was an error!", error);
+        alert("Invalid credentials");
       }
     }
   };
@@ -101,47 +87,28 @@ export default function Login() {
         <form className="login-form" onSubmit={handleSubmit}>
           <h1 className="text-center fw-bold shadow">WELCOME BACK..!</h1>
 
-          <div className="mb3">
-            <label htmlFor="userType" className="form-label">
-              Select User Type:
-            </label>
-            <select
-              className="form-control mb-3"
-              id="userType"
-              value={userType}
-              onChange={handleUserTypeChange}
-              required
-            >
-              <option value="" disabled>
-                Select User Type
-              </option>
-              <option value="BHMSStudent">BHMS Student</option>
-              <option value="HomeopathicDoctor">Homeopathic Doctor</option>
-              <option value="Practitioner with Non-Indian/International Degrees">
-                Practitioner with Non-Indian/International Degrees
-              </option>
-            </select>
-          </div>
-
           <div className="mb-3">
-            <label htmlFor="email" className="form-label shadow">
-              Email address
+            <label htmlFor="username" className="form-label shadow">
+              Email
             </label>
             <div className="input-group">
               <input
                 type="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                id="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={handleEmailChange}
+                className={`form-control ${
+                  errors.username ? "is-invalid" : ""
+                }`}
+                id="username"
+                name="username"
+                placeholder="Enter your email"
+                value={details.username}
+                onChange={handleChange}
               />
-              {isEmailValid && (
+              {isUsernameValid && (
                 <span className="input-group-text text-success">✔</span>
               )}
             </div>
-            {errors.email && (
-              <div className="invalid-feedback">{errors.email}</div>
+            {errors.username && (
+              <div className="invalid-feedback">{errors.username}</div>
             )}
           </div>
 
@@ -153,12 +120,13 @@ export default function Login() {
               <input
                 type="password"
                 id="password"
+                name="password"
                 className={`form-control ${
                   errors.password ? "is-invalid" : ""
                 }`}
                 aria-describedby="passwordHelpBlock"
-                value={password}
-                onChange={handlePasswordChange}
+                value={details.password}
+                onChange={handleChange}
               />
               {isPasswordValid && (
                 <span className="input-group-text text-success">✔</span>
@@ -180,9 +148,6 @@ export default function Login() {
               Forget Password
             </a>
           </div>
-          {errors.form && (
-            <div className="alert alert-danger mt-3">{errors.form}</div>
-          )}
         </form>
       </div>
     </div>

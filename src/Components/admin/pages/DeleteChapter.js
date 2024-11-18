@@ -17,7 +17,7 @@ const DeleteChapter = () => {
     if (window.confirm("Are you sure you want to delete this chapter?")) {
       try {
         // Send DELETE request using axios
-        const response = await api.delete(`/chapter/${chapterNumber}`);
+        const response = await api.delete(`/admins/chapter/${chapterNumber}`);
 
         // If response is successful
         console.log("Chapter deleted successfully");

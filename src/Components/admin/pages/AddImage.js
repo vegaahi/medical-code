@@ -63,7 +63,7 @@ const AddImage = () => {
     formData.append("contentType", "IMAGE");
 
     try {
-      const response = await api.post("/subchapter/image", formData, {
+      const response = await api.post("/admins/subchapter/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

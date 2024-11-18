@@ -24,7 +24,7 @@ const UpdateImage = () => {
 
     try {
       const response = await api.put(
-        `/subchapter/image/${chapterNumber}/${subChapterNumber}/${imageNumber}`,
+        `/admins/subchapter/image/${chapterNumber}/${subChapterNumber}/${imageNumber}`,
         formData,
         {
           headers: {
