@@ -53,3 +53,4 @@ const CoinManager = ({ username }) => {
 };
 
 export default CoinManager;
+
