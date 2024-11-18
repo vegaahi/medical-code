@@ -20,7 +20,7 @@ const AddChapter = () => {
     try {
       // Example of sending data to an API using axios
       const response = await api.post(
-        `/chapter/${chapterNumber}`,
+        `/admins/chapter/${chapterNumber}`,
         chapterData,
         {
           headers: {
