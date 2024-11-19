@@ -5,7 +5,8 @@ import PieChartComponent from "./PieChartComponent"; // Import the pie chart com
 import api from "../../../api";
 
 const AdminDashboard = () => {
-  const [userStats, setUserStats] = useState(0);
+  const [userStats, setUserStats] = useState({ totalUsers: 0 });
+  const [chapterStats, setChapterStats] = useState({ totalChapters: 0 });
   const [orderStats, setOrderStats] = useState({});
   const [messageStats, setMessageStats] = useState({});
 
@@ -13,16 +14,44 @@ const AdminDashboard = () => {
     // Function to fetch data for users, orders, and messages
     const fetchData = async () => {
       try {
-        const usersResponse = await api.get("/admins/chapter/"); // Example endpoint
-        // const ordersResponse = await fetch("/api/orders");
-        // const messagesResponse = await fetch("/api/messages");
+        const [
+          usersResponse,
+          chapterResponse,
+          //ordersResponse,
+          //messagesResponse,
+        ] = await Promise.all([
+          api.get("/admins/customers"), // Example endpoint for users
+          api.get("/admins/chapter/"), // Example endpoint for users
+          // api.get("/admins/orders"), // Example endpoint for orders
+          //api.get("/admins/messages"), // Example endpoint for messages
+        ]);
 
+        const chapterData = chapterResponse.data.length;
         const usersData = usersResponse.data.length;
-        // const usersData = await usersResponse.json();
-        // const ordersData = await ordersResponse.json();
-        // const messagesData = await messagesResponse.json();
+        // const ordersData = ordersResponse.data.length;
+        // const messagesData = messagesResponse.data.length;
+        const students = usersResponse.data.filter(
+          (user) => user.customerType === "STUDENT"
+        ).length;
+        const homeoDoctors = usersResponse.data.filter(
+          (user) => user.customerType === "HOMEOPATHICDOCTORENTITY"
+        ).length;
+        const nriDoctors = usersResponse.data.filter(
+          (user) => user.customerType === "NRIDOCTORENTITY"
+        ).length;
 
-        setUserStats(usersData);
+        setChapterStats((prevStats) => ({
+          ...prevStats,
+          totalChapters: chapterData,
+        }));
+        setUserStats((prevStats) => ({
+          ...prevStats,
+          totalUsers: usersData,
+          studentsCount: students,
+          homeoDoctorsCount: homeoDoctors,
+          nriDoctorsCount: nriDoctors,
+        }));
+        console.log("my Users Data", userStats.totalUsers);
         // setOrderStats(ordersData);
         // setMessageStats(messagesData);
       } catch (error) {
@@ -49,7 +78,7 @@ const AdminDashboard = () => {
           <ReusableCard
             title="Chapters"
             icon="📚"
-            count={userStats}
+            count={chapterStats.totalChapters || 0}
             description="Total Chapters"
           />
         </div>
@@ -72,14 +101,15 @@ const AdminDashboard = () => {
       </div>
 
       {/* Pie Charts for users, orders, and messages */}
+
       <div className="row mt-5">
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
           <PieChartComponent
             title="Users Breakdown"
             data={[
-              { name: "Subscribed", value: userStats.subscribed || 0 },
-              { name: "Bought Book", value: userStats.boughtBook || 0 },
-              { name: "Bought Chapter", value: userStats.boughtChapter || 0 },
+              { name: "student", value: userStats.studentsCount || 0 },
+              { name: "homeo doctor", value: userStats.homeoDoctorsCount || 0 },
+              { name: "nri doctor", value: userStats.nriDoctorsCount || 0 },
             ]}
           />
         </div>
@@ -87,8 +117,9 @@ const AdminDashboard = () => {
           <PieChartComponent
             title="Order Status"
             data={[
-              { name: "Pending", value: orderStats.pending || 0 },
-              { name: "Succeeded", value: orderStats.succeeded || 0 },
+              { name: "Pending", value: orderStats.pending || 2 },
+              { name: "Succeeded", value: orderStats.succeeded || 4 },
+              { name: "Failed", value: orderStats.failed || 1 },
             ]}
           />
         </div>
@@ -96,8 +127,8 @@ const AdminDashboard = () => {
           <PieChartComponent
             title="Messages Status"
             data={[
-              { name: "Replied", value: messageStats.replied || 0 },
-              { name: "Pending Reply", value: messageStats.pendingReply || 0 },
+              { name: "Replied", value: messageStats.replied || 5 },
+              { name: "Pending Reply", value: messageStats.pendingReply || 6 },
             ]}
           />
         </div>
