@@ -7,8 +7,8 @@ import api from "../../../api";
 const AdminDashboard = () => {
   const [userStats, setUserStats] = useState({ totalUsers: 0 });
   const [chapterStats, setChapterStats] = useState({ totalChapters: 0 });
-  const [orderStats, setOrderStats] = useState({});
-  const [messageStats, setMessageStats] = useState({});
+  const [orderStats, setOrderStats] = useState(0);
+  const [messageStats, setMessageStats] = useState({ totalMessages: 0 });
 
   useEffect(() => {
     // Function to fetch data for users, orders, and messages
@@ -18,18 +18,18 @@ const AdminDashboard = () => {
           usersResponse,
           chapterResponse,
           //ordersResponse,
-          //messagesResponse,
+          messagesResponse,
         ] = await Promise.all([
           api.get("/admins/customers"), // Example endpoint for users
           api.get("/admins/chapter/"), // Example endpoint for users
           // api.get("/admins/orders"), // Example endpoint for orders
-          //api.get("/admins/messages"), // Example endpoint for messages
+          api.get("/admins/tickets/get/all"), // Example endpoint for messages
         ]);
 
         const chapterData = chapterResponse.data.length;
         const usersData = usersResponse.data.length;
         // const ordersData = ordersResponse.data.length;
-        // const messagesData = messagesResponse.data.length;
+        const messagesData = messagesResponse.data.length;
         const students = usersResponse.data.filter(
           (user) => user.customerType === "STUDENT"
         ).length;
@@ -50,6 +50,10 @@ const AdminDashboard = () => {
           studentsCount: students,
           homeoDoctorsCount: homeoDoctors,
           nriDoctorsCount: nriDoctors,
+        }));
+        setMessageStats((prevStats) => ({
+          ...prevStats,
+          totalMessages: messagesData,
         }));
         console.log("my Users Data", userStats.totalUsers);
         // setOrderStats(ordersData);
