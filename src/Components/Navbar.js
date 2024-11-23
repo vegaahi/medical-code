@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../css/Navbar.css";
 import logo from "../Assets/medicalbook logo.jpg";
 import { Link } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext); // Get user context
+  console.log(user);
+
   return (
     <nav className="navbar navbar-expand-lg sticky-top py-0 navbar-custom">
       <div className="container-fluid navbar px-5 pb-3 ">
@@ -37,30 +41,45 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link active text-white fw-semibold fs-5"
-                to="/register"
-              >
-                Register
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link active text-white fw-semibold fs-5"
-                to="/login"
-              >
-                Login
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link active text-white fw-semibold fs-5"
-                to="/adminlogin"
-              >
-                AdminLogin
-              </Link>
-            </li>
+            {user ? (
+              // If the user is logged in, show Logout
+              <li className="nav-item">
+                <Link
+                  className="nav-link active text-white fw-semibold fs-5"
+                  to="/logout"
+                >
+                  Logout
+                </Link>
+              </li>
+            ) : (
+              // If no user, show Register, Login, and AdminLogin
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active text-white fw-semibold fs-5"
+                    to="/register"
+                  >
+                    Register
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active text-white fw-semibold fs-5"
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active text-white fw-semibold fs-5"
+                    to="/adminlogin"
+                  >
+                    AdminLogin
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
@@ -68,4 +87,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar;
