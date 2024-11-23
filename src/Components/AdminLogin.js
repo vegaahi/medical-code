@@ -90,7 +90,7 @@ export default function Login() {
     <div className="login-container">
       <div className="login-form-container">
         <form className="login-form" onSubmit={handleSubmit}>
-          <h1 className="text-center fw-bold shadow">WELCOME BACK..!</h1>
+          <h1 className="text-center fw-bold shadow">WELCOME BACK..! ADMIN</h1>
 
           <div className="mb-3">
             <label htmlFor="username" className="form-label shadow">
