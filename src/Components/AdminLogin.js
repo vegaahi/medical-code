@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 import "../css/Login.css"; // Ensure styles for the input and error messages
 
 export default function Login() {
@@ -8,6 +9,8 @@ export default function Login() {
   const [errors, setErrors] = useState({ username: "", password: "" });
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const { updateUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const validateUsername = (value) => {
@@ -70,6 +73,8 @@ export default function Login() {
           },
         });
         if (response.status === 200) {
+          login();
+          await updateUser();
           navigate("/admin");
         } else {
           alert("Login failed");
