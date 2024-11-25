@@ -28,7 +28,7 @@ import EditPackage from "./pages/EditPackage";
 import SubscriptionDetails from "./pages/SubscriptionDetails";
 import ActivityTracker from "./pages/ActivityTracker";
 import CoinManager from "./pages/CoinManager";
-
+import GetAllTickets from "./pages/GetAllTickets";
 
 function Admin() {
   return (
@@ -48,7 +48,7 @@ function Admin() {
         <Route path="/deletesubchapter" element={<DeleteSubChapter />} />
         <Route path="/deleteimage" element={<DeleteImg />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/messages" element={<Messages />} />
+        <Route path="/tickets" element={<GetAllTickets />} />
         <Route path="/order" element={<Order />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/fonts" element={<Fonts />} />

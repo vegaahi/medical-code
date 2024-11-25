@@ -40,6 +40,21 @@ const AdminDashboard = () => {
           (user) => user.customerType === "NRIDOCTORENTITY"
         ).length;
 
+        const openTickets = messagesResponse.data.filter(
+          (message) => message.status === "OPEN"
+        ).length;
+
+        const closedTickets = messagesResponse.data.filter(
+          (message) => message.status === "CLOSED"
+        ).length;
+
+        setMessageStats((prevStats) => ({
+          ...prevStats,
+          totalMessages: messagesData,
+          openTickets: openTickets,
+          closedTickets: closedTickets,
+        }));
+
         setChapterStats((prevStats) => ({
           ...prevStats,
           totalChapters: chapterData,
@@ -51,11 +66,8 @@ const AdminDashboard = () => {
           homeoDoctorsCount: homeoDoctors,
           nriDoctorsCount: nriDoctors,
         }));
-        setMessageStats((prevStats) => ({
-          ...prevStats,
-          totalMessages: messagesData,
-        }));
-        console.log("my Users Data", userStats.totalUsers);
+
+        console.log(messageStats.data[0].status);
         // setOrderStats(ordersData);
         // setMessageStats(messagesData);
       } catch (error) {
@@ -131,8 +143,11 @@ const AdminDashboard = () => {
           <PieChartComponent
             title="Messages Status"
             data={[
-              { name: "Replied", value: messageStats.replied || 5 },
-              { name: "Pending Reply", value: messageStats.pendingReply || 6 },
+              {
+                name: "open",
+                value: messageStats.openTickets || 0,
+              },
+              { name: "closed", value: messageStats.closedTickets || 0 },
             ]}
           />
         </div>
