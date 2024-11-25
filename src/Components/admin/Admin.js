@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Users from "./pages/Users";
+
 import Messages from "./pages/Messages";
 import AdminDashboard from "./pages/AdminDashboard";
 import ViewContent from "../ViewContent";
@@ -28,7 +28,12 @@ import EditPackage from "./pages/EditPackage";
 import SubscriptionDetails from "./pages/SubscriptionDetails";
 import ActivityTracker from "./pages/ActivityTracker";
 import CoinManager from "./pages/CoinManager";
+<<<<<<< HEAD
 import GetAllTickets from "./pages/GetAllTickets";
+=======
+import GetAllCustomers from "../customer/pages/GetAllCustomers";
+
+>>>>>>> 969675278c5429de3bc7a0e08ac7cb57511a92d6
 
 function Admin() {
   return (
@@ -38,6 +43,7 @@ function Admin() {
         <Route path="/addchapter" element={<AddChapter />} />
         <Route path="/viewContent/:chapterNumber" element={<ViewContent />} />
         <Route path="/getallchapters" element={<GetAllChapters />} />
+        <Route path="/getallcustomers" element={<GetAllCustomers/>} />
         <Route path="/addsubchapter" element={<AddSubChapter />} />
         <Route path="/addimage" element={<AddImage />} />
         <Route path="/updateimage" element={<UpdateImage />} />
@@ -47,8 +53,12 @@ function Admin() {
         <Route path="/deletechapter" element={<DeleteChapter />} />
         <Route path="/deletesubchapter" element={<DeleteSubChapter />} />
         <Route path="/deleteimage" element={<DeleteImg />} />
+<<<<<<< HEAD
         <Route path="/users" element={<Users />} />
         <Route path="/tickets" element={<GetAllTickets />} />
+=======
+        <Route path="/messages" element={<Messages />} />
+>>>>>>> 969675278c5429de3bc7a0e08ac7cb57511a92d6
         <Route path="/order" element={<Order />} />
         <Route path="/settings" element={<Setting />} />
         <Route path="/fonts" element={<Fonts />} />

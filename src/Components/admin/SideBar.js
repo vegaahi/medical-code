@@ -102,8 +102,8 @@ const routes = [
   },
 
   {
-    path: "/admin/users",
-    name: "Users",
+    path: "/admin/getallcustomers",
+    name: "GetAllCustomers",
     icon: <FaUser />,
   },
   {
