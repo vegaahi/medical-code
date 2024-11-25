@@ -1,5 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { FaBars, FaFont, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
+import {
+  FaBars,
+  FaFont,
+  FaHome,
+  FaLock,
+  FaMoneyBill,
+  FaUser,
+} from "react-icons/fa";
 import {
   FaBookMedical,
   FaBookOpen,
@@ -100,8 +107,8 @@ const routes = [
     icon: <FaUser />,
   },
   {
-    path: "/admin/messages",
-    name: "Messages",
+    path: "/admin/tickets",
+    name: "GetAllTicekts",
     icon: <MdMessage />,
   },
 
@@ -114,15 +121,12 @@ const routes = [
     path: "/admin/subscriptions",
     name: "subscription",
     icon: <MdSubscriptions />,
-  }
-  ,
+  },
   {
     path: "/admin/packagelist",
     name: "packagelist",
     icon: <MdList />,
-  }
-  ,
- 
+  },
   {
     path: "/admin/settings",
     name: "Setting",
