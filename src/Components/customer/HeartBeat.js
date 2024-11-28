@@ -15,7 +15,7 @@ function HeartBeat() {
   useEffect(() => {
     const interval = setInterval(() => {
       sendHeartbeat();
-    }, 60000); // every minute
+    }, 70000); // every minute
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
