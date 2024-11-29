@@ -73,7 +73,7 @@ export default function Login() {
         });
         if (response.status === 200) {
           await updateUser();
-          navigate("/customer");
+          navigate("/customer/profile");
         } else {
           alert("Login failed");
         }

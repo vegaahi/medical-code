@@ -3,11 +3,21 @@ import "../css/Navbar.css";
 import logo from "../Assets/medicalbook logo.jpg";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
-import { FaHome, FaUserPlus, FaSignInAlt, FaSignOutAlt, FaUserShield } from "react-icons/fa"; // React icons import
+import {
+  FaHome,
+  FaUserPlus,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserShield,
+  FaUser,
+  FaTicketAlt,
+} from "react-icons/fa"; // React icons import
 import { motion } from "framer-motion"; // Import Framer Motion
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext); // Get user context
+  const { user } = useContext(AuthContext);
+  // Get user context
+
   console.log(user);
 
   return (
@@ -46,22 +56,7 @@ const Navbar = () => {
                 </Link>
               </motion.div>
             </li>
-            {user ? (
-              <li className="nav-item mx-3">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Link
-                    className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
-                    to="/logout"
-                  >
-                    <FaSignOutAlt className="me-2" style={{ color: "#f44336" }} />
-                    Logout
-                  </Link>
-                </motion.div>
-              </li>
-            ) : (
+            {!user ? (
               <>
                 <li className="nav-item mx-3">
                   <motion.div
@@ -72,7 +67,10 @@ const Navbar = () => {
                       className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
                       to="/register"
                     >
-                      <FaUserPlus className="me-2" style={{ color: "#4caf50" }} />
+                      <FaUserPlus
+                        className="me-2"
+                        style={{ color: "#4caf50" }}
+                      />
                       Register
                     </Link>
                   </motion.div>
@@ -86,7 +84,10 @@ const Navbar = () => {
                       className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
                       to="/login"
                     >
-                      <FaSignInAlt className="me-2" style={{ color: "#2196f3" }} />
+                      <FaSignInAlt
+                        className="me-2"
+                        style={{ color: "#2196f3" }}
+                      />
                       Login
                     </Link>
                   </motion.div>
@@ -100,11 +101,94 @@ const Navbar = () => {
                       className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
                       to="/adminlogin"
                     >
-                      <FaUserShield className="me-2" style={{ color: "#ff9800" }} />
+                      <FaUserShield
+                        className="me-2"
+                        style={{ color: "#ff9800" }}
+                      />
                       Admin Login
                     </Link>
                   </motion.div>
                 </li>
+              </>
+            ) : (
+              <>
+                {user.role === "ROLE_ADMIN" ? (
+                  <>
+                    <li className="nav-item mx-3">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Link
+                          className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
+                          to="/logout"
+                        >
+                          <FaSignOutAlt
+                            className="me-2"
+                            style={{ color: "#f44336" }}
+                          />
+                          Logout
+                        </Link>
+                      </motion.div>
+                    </li>
+                  </>
+                ) : user.role === "ROLE_CUSTOMER" ? (
+                  <>
+                    <li className="nav-item mx-3">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Link
+                          className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
+                          to="/customer/profile"
+                        >
+                          <FaUser
+                            className="me-2"
+                            style={{ color: "#4caf50" }}
+                          />
+                          profile
+                        </Link>
+                      </motion.div>
+                    </li>
+
+                    <li className="nav-item mx-3">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Link
+                          className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
+                          to="/customer/tickets"
+                        >
+                          <FaTicketAlt
+                            className="me-2"
+                            style={{ color: "blue" }}
+                          />
+                          Tickets
+                        </Link>
+                      </motion.div>
+                    </li>
+
+                    <li className="nav-item mx-3">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Link
+                          className="nav-link text-white fw-semibold fs-5 d-flex align-items-center"
+                          to="/logout"
+                        >
+                          <FaSignOutAlt
+                            className="me-2"
+                            style={{ color: "#f44336" }}
+                          />
+                          Logout
+                        </Link>
+                      </motion.div>
+                    </li>
+                  </>
+                ) : null}
               </>
             )}
           </ul>
