@@ -1,71 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import api from "../../../api";
+import AuthContext from "../../../context/AuthContext";
 
-const CustomerProfile = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    mobileNumber: '',
-    dob: '',
-    customerType: '',
-    currentCountry: '',
-    currentState: '',
-    currentCity: '',
-    currentAddressLine: '',
-    permanentCountry: '',
-    permanentState: '',
-    permanentCity: '',
-    permanentAddressLine: '',
-    alternatePhoneNumber: '',
-    currentYear: '',
-    universityName: '',
-    qualification: '',
-    registrationNumber: '',
-    stateRegistred: '',
-    university: '',
-    collage: '',
-    currentJob: '',
-    registrationCouncil: '',
-    countryRegistredWith: '',
-    institutionAttendedForHomeopathy: '',
-  });
+// Assuming api.js is in the same directory level
+
+const CustomerProfile = (props) => {
+  const { customerData, setCustomerData } = props;
+  const { user } = useContext(AuthContext);
+  console.log(user.username);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('https://jsonplaceholder.typicode.com/users/1')
-      .then((response) => {
-        setFormData({
-          fullName: response.data.name,
-          email: response.data.email,
-          mobileNumber: response.data.phone,
-          dob: '1990-01-01',
-          currentCountry: 'Country',
-          currentState: 'State',
-          currentCity: 'City',
-          currentAddressLine: 'Address Line',
-          permanentCountry: 'Permanent Country',
-          permanentState: 'Permanent State',
-          permanentCity: 'Permanent City',
-          permanentAddressLine: 'Permanent Address Line',
-          alternatePhoneNumber: 'Alternate Phone',
-          customerType: 'Homeopathic Practitioner',
-          currentJob: 'Job Title',
-          qualification: 'Qualification',
-          universityName: 'University Name',
-          collage: 'Collage',
-          registrationCouncil: 'Registration Council',
-          stateRegistred: 'State Registered',
-          countryRegistredWith: 'Country Registered',
-          institutionAttendedForHomeopathy: 'Institution',
-        });
+    const fetchData = async () => {
+      const response = await api.get(
+        `/customers/get/customer/email/${user.username}`
+      );
+      if (response.status === 200) {
+        setCustomerData((prev) => ({ ...prev, ...response.data }));
         setLoading(false);
-      })
-      .catch(() => {
-        setError('Error fetching data');
+      } else {
+        setError("Failed to fetch customer data");
         setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -99,20 +59,22 @@ const CustomerProfile = () => {
               <div
                 className="rounded-circle mx-auto mb-3"
                 style={{
-                  width: '100px',
-                  height: '100px',
-                  fontSize: '50px',
-                  lineHeight: '100px',
-                  backgroundColor: '#f5f5f5',
-                  color: '#555',
+                  width: "100px",
+                  height: "100px",
+                  fontSize: "50px",
+                  lineHeight: "100px",
+                  backgroundColor: "#f5f5f5",
+                  color: "#555",
                 }}
               >
                 👤
               </div>
-              <h5 className="mb-1">{formData.fullName || 'Full Name'}</h5>
-              <p className="text-muted mb-2">{formData.customerType || 'Customer Type'}</p>
+              <h5 className="mb-1">{customerData.fullName || "Full Name"}</h5>
+              <p className="text-muted mb-2">
+                {customerData.customerType || "Customer Type"}
+              </p>
               <p>
-                📍 {formData.currentCity}, {formData.currentCountry}
+                📍 {customerData.currentCity}, {customerData.currentCountry}
               </p>
             </div>
           </div>
@@ -120,15 +82,22 @@ const CustomerProfile = () => {
             <div className="card-body">
               <h6 className="mb-3">Contact Information</h6>
               <ul className="list-unstyled">
-                <li>
-                  ✉️ <strong>Email:</strong> {formData.email}
-                </li>
-                <li>
-                  📞 <strong>Phone:</strong> {formData.mobileNumber}
-                </li>
-                <li>
-                  📞 <strong>Alternate Phone:</strong> {formData.alternatePhoneNumber}
-                </li>
+                {customerData.email && (
+                  <li>
+                    ✉️ <strong>Email:</strong> {customerData.email}
+                  </li>
+                )}
+                {customerData.mobileNumber && (
+                  <li>
+                    📞 <strong>Phone:</strong> {customerData.mobileNumber}
+                  </li>
+                )}
+                {customerData.alternatePhoneNumber && (
+                  <li>
+                    📞 <strong>Alternate Phone:</strong>{" "}
+                    {customerData.alternatePhoneNumber}
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -140,44 +109,70 @@ const CustomerProfile = () => {
             <div className="card-body">
               <h5 className="card-title mb-3">Personal Information</h5>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Full Name:</strong> {formData.fullName}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Date of Birth:</strong> {formData.dob}
-                </div>
+                {customerData.fullName && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Full Name:</strong> {customerData.fullName}
+                  </div>
+                )}
+                {customerData.dob && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Date of Birth:</strong> {customerData.dob}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Current Country:</strong> {formData.currentCountry}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Permanent Country:</strong> {formData.permanentCountry}
-                </div>
+                {customerData.currentCountry && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Current Country:</strong>{" "}
+                    {customerData.currentCountry}
+                  </div>
+                )}
+                {customerData.permanentCountry && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Permanent Country:</strong>{" "}
+                    {customerData.permanentCountry}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Current State:</strong> {formData.currentState}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Permanent State:</strong> {formData.permanentState}
-                </div>
+                {customerData.currentState && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Current State:</strong> {customerData.currentState}
+                  </div>
+                )}
+                {customerData.permanentState && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Permanent State:</strong>{" "}
+                    {customerData.permanentState}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Current City:</strong> {formData.currentCity}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Permanent City:</strong> {formData.permanentCity}
-                </div>
+                {customerData.currentCity && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Current City:</strong> {customerData.currentCity}
+                  </div>
+                )}
+                {customerData.permanentCity && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Permanent City:</strong>{" "}
+                    {customerData.permanentCity}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Current Address:</strong> {formData.currentAddressLine}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Permanent Address:</strong> {formData.permanentAddressLine}
-                </div>
+                {customerData.currentAddressLine && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Current Address:</strong>{" "}
+                    {customerData.currentAddressLine}
+                  </div>
+                )}
+                {customerData.permanentAddressLine && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Permanent Address:</strong>{" "}
+                    {customerData.permanentAddressLine}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -186,36 +181,57 @@ const CustomerProfile = () => {
             <div className="card-body">
               <h5 className="card-title mb-3">Professional Information</h5>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Current Job:</strong> {formData.currentJob}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Qualification:</strong> {formData.qualification}
-                </div>
+                {customerData.currentJob && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Current Job:</strong> {customerData.currentJob}
+                  </div>
+                )}
+                {customerData.qualification && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Qualification:</strong> {customerData.qualification}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>University Name:</strong> {formData.universityName}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Collage:</strong> {formData.collage}
-                </div>
+                {customerData.universityName && (
+                  <div className="col-md-6 mb-2">
+                    <strong>University Name:</strong>{" "}
+                    {customerData.universityName}
+                  </div>
+                )}
+                {customerData.collage && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Collage:</strong> {customerData.collage}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Registration Council:</strong> {formData.registrationCouncil}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>State Registered:</strong> {formData.stateRegistred}
-                </div>
+                {customerData.registrationCouncil && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Registration Council:</strong>{" "}
+                    {customerData.registrationCouncil}
+                  </div>
+                )}
+                {customerData.stateRegistred && (
+                  <div className="col-md-6 mb-2">
+                    <strong>State Registered:</strong>{" "}
+                    {customerData.stateRegistred}
+                  </div>
+                )}
               </div>
               <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Country Registered:</strong> {formData.countryRegistredWith}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Institution Attended:</strong> {formData.institutionAttendedForHomeopathy}
-                </div>
+                {customerData.countryRegistredWith && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Country Registered:</strong>{" "}
+                    {customerData.countryRegistredWith}
+                  </div>
+                )}
+                {customerData.institutionAttendedForHomeopathy && (
+                  <div className="col-md-6 mb-2">
+                    <strong>Institution Attended:</strong>{" "}
+                    {customerData.institutionAttendedForHomeopathy}
+                  </div>
+                )}
               </div>
             </div>
           </div>

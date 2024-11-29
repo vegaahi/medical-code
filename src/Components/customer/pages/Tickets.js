@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import api from "../../../api";
 
-const Tickets = () => {
+const Tickets = (props) => {
+  const { customerData } = props;
   const [tickets, setTickets] = useState([]);
   const [formData, setFormData] = useState({
     customerName: "",
@@ -15,7 +15,11 @@ const Tickets = () => {
   }, []);
   const fetchTickets = async () => {
     try {
-      const response = await api.get("/customers/tickets/status/{id}");
+      console.log("id: ", customerData.id);
+      console.log("customerData: ", customerData);
+      const response = await api.get(
+        `/customers/tickets/get/${customerData.id}`
+      );
       setTickets(response.data);
     } catch (error) {
       console.error("Error fetching tickets:", error);
