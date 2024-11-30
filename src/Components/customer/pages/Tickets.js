@@ -5,14 +5,29 @@ const Tickets = (props) => {
   const { customerData } = props;
   const [tickets, setTickets] = useState([]);
   const [formData, setFormData] = useState({
-    customerName: "",
-    email: "",
+    customerName: customerData.fullName,
+    email: customerData.email,
     issueDescription: "",
+    priority: "Low",
+    status: "Open",
   });
   // Fetch tickets
   useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        console.log("id: ", customerData.id);
+        console.log("customerData: ", customerData);
+        const response = await api.get(
+          `/customers/tickets/get/${customerData.id}`
+        );
+        setTickets(response.data);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      }
+    };
     fetchTickets();
-  }, []);
+  }, [customerData.id]);
+
   const fetchTickets = async () => {
     try {
       console.log("id: ", customerData.id);
@@ -29,24 +44,41 @@ const Tickets = (props) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const ticketData = {
+      ...formData,
+      customerId: {
+        id: customerData.id,
+        customerType: customerData.customerType,
+      },
+    };
+
     try {
-      await api.post("/customers/tickets/post", {
-        ...formData,
-        priority: "LOW", // Default priority
-        status: "OPEN", // Default status
-      });
+      await api.post("/customers/tickets/post", ticketData);
+      // setFormData({
+      //   customerName: "",
+      //   email: "",
+      //   issueDescription: "",
+      //   priority: "Low",
+      //   status: "Open",
+      // });
       setFormData({
-        customerName: "",
-        email: "",
+        customerName: customerData.fullName,
+        email: customerData.email,
         issueDescription: "",
+        priority: "Low",
+        status: "Open",
       });
+
       fetchTickets();
     } catch (error) {
       console.error("Error saving ticket:", error);
     }
   };
+
   return (
     <div className="container">
       <h1 className="my-4">Raise a Ticket</h1>
@@ -61,8 +93,9 @@ const Tickets = (props) => {
             className="form-control"
             id="customerName"
             name="customerName"
-            value={formData.customerName}
+            value={customerData.fullName}
             onChange={handleInputChange}
+            readOnly
             required
           />
         </div>
@@ -75,8 +108,9 @@ const Tickets = (props) => {
             className="form-control"
             id="email"
             name="email"
-            value={formData.email}
+            value={customerData.email}
             onChange={handleInputChange}
+            readOnly
             required
           />
         </div>
@@ -117,7 +151,7 @@ const Tickets = (props) => {
               <td>{ticket.customerName}</td>
               <td>{ticket.email}</td>
               <td>{ticket.issueDescription}</td>
-              <td>{ticket.priority}</td>
+              <td>{ticket.createdAt}</td>
               <td>{ticket.status}</td>
             </tr>
           ))}
