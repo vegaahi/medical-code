@@ -140,7 +140,7 @@ const Tickets = (props) => {
             <th>Customer Name</th>
             <th>Email</th>
             <th>Issue Description</th>
-            <th>Priority</th>
+            <th>Created At</th>
             <th>Status</th>
           </tr>
         </thead>
