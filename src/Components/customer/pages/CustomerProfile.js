@@ -30,6 +30,15 @@ const CustomerProfile = (props) => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+  const formatDate = (dateArray) => {
+    if (!Array.isArray(dateArray) || dateArray.length !== 3) {
+      throw new Error("Invalid date array");
+    }
+    const [year, month, day] = dateArray;
+    const formattedMonth = String(month).padStart(2, "0");
+    const formattedDay = String(day).padStart(2, "0");
+    return `${year}-${formattedMonth}-${formattedDay}`;
+  };
 
   return (
     <div className="container mt-5">
@@ -116,7 +125,8 @@ const CustomerProfile = (props) => {
                 )}
                 {customerData.dob && (
                   <div className="col-md-6 mb-2">
-                    <strong>Date of Birth:</strong> {customerData.dob}
+                    <strong>Date of Birth:</strong>{" "}
+                    {formatDate(customerData.dob)}
                   </div>
                 )}
               </div>

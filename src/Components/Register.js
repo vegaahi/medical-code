@@ -1,10 +1,19 @@
 import React, { useState } from "react";
+
 import "../css/Register.css";
 import api from "../api";
 import Otp from "./Otp";
 import axios from "axios";
+
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 export default function Register() {
   const [userType, setUserType] = useState("");
+  // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const EyeIcon = showPassword ? AiOutlineEyeInvisible : AiOutlineEye;
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
@@ -175,7 +184,6 @@ export default function Register() {
     <div className="registration-container">
       <form className="registration-form" onSubmit={handleSubmit}>
         <h1 className="text-center">Register</h1>
-
         {/* Personal Information */}
         <div className="row mb-3 justify-content-center">
           <div className="col-md-5">
@@ -245,32 +253,52 @@ export default function Register() {
             <label htmlFor="password" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                style={{ backgroundColor: "#e0f7fa" }}
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                <EyeIcon />
+              </button>
+            </div>
           </div>
 
           <div className="col-md-5">
             <label htmlFor="confirmPassword" className="form-label">
               Confirm Password
             </label>
-            <input
-              type="password"
-              className="form-control"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              required
-            />
+            <div className="input-group">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className="form-control"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                required
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                style={{ backgroundColor: "#e0f7fa" }}
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+              >
+                <EyeIcon />
+              </button>
+            </div>
           </div>
         </div>
         {/* Current and Permanent Address Section */}

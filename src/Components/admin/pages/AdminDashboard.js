@@ -41,11 +41,11 @@ const AdminDashboard = () => {
         ).length;
 
         const openTickets = messagesResponse.data.filter(
-          (message) => message.status === "OPEN"
+          (message) => message.status === "Open"
         ).length;
 
         const closedTickets = messagesResponse.data.filter(
-          (message) => message.status === "CLOSED"
+          (message) => message.status === "Closed"
         ).length;
 
         setMessageStats((prevStats) => ({

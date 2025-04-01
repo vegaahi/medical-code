@@ -1,8 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080", // Your API base URL
+  baseURL: "http://62.72.29.190:8080", // Your API base URL
+  // baseURL: "http://localhost:8080",
   withCredentials: true, // Ensure cookies are sent with each request
+  headers: {
+    "Content-Type": "application/json", // Ensure Content-Type matches the backend
+  },
 });
 
 let isRefreshing = false; // Tracks if a token refresh is in progress

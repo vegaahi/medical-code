@@ -3,12 +3,16 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import "../css/Login.css"; // Ensure styles for the input and error messages
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function Login() {
   const [details, setDetails] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const EyeIcon = showPassword ? AiOutlineEyeInvisible : AiOutlineEye;
+
   const { updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -121,7 +125,7 @@ export default function Login() {
             </label>
             <div className="input-group">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 className={`form-control ${
@@ -134,6 +138,14 @@ export default function Login() {
               {isPasswordValid && (
                 <span className="input-group-text text-success">✔</span>
               )}
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                style={{ backgroundColor: "#e0f7fa" }}
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                <EyeIcon />
+              </button>
             </div>
             {errors.password && (
               <div className="invalid-feedback">{errors.password}</div>
