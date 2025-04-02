@@ -32,6 +32,17 @@ const GetAllCustomers = () => {
     indexOfLastCustomer
   );
 
+  const formatDate = (dateArray) => {
+    if (!Array.isArray(dateArray) || dateArray.length !== 3) {
+      throw new Error("Invalid date array");
+    }
+    console.log(dateArray);
+    const [year, month, day] = dateArray;
+    const formattedMonth = String(month).padStart(2, "0");
+    const formattedDay = String(day).padStart(2, "0");
+    return `${year}-${formattedMonth}-${formattedDay}`;
+  };
+
   const totalPages = Math.ceil(customers.length / customersPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -67,7 +78,7 @@ const GetAllCustomers = () => {
               <td>{customer.fullName}</td>
               <td>{customer.email}</td>
               <td>{customer.mobileNumber}</td>
-              <td>{customer.dob}</td>
+              <td> {formatDate(customer.dob)}</td>
               <td>{customer.customerType}</td>
               <td>{customer.totalCoins}</td>
               <td>{customer.totalTokens}</td>

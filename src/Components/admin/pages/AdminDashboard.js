@@ -1,7 +1,7 @@
-// Dashboard.js
 import React, { useState, useEffect } from "react";
-import ReusableCard from "./DashboardCard"; // Import the reusable card component
-import PieChartComponent from "./PieChartComponent"; // Import the pie chart component
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import ReusableCard from "./DashboardCard";
+import PieChartComponent from "./PieChartComponent";
 import api from "../../../api";
 
 const AdminDashboard = () => {
@@ -10,25 +10,20 @@ const AdminDashboard = () => {
   const [orderStats, setOrderStats] = useState(0);
   const [messageStats, setMessageStats] = useState({ totalMessages: 0 });
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   useEffect(() => {
-    // Function to fetch data for users, orders, and messages
     const fetchData = async () => {
       try {
-        const [
-          usersResponse,
-          chapterResponse,
-          //ordersResponse,
-          messagesResponse,
-        ] = await Promise.all([
-          api.get("/admins/customers"), // Example endpoint for users
-          api.get("/admins/chapter/"), // Example endpoint for users
-          // api.get("/admins/orders"), // Example endpoint for orders
-          api.get("/admins/tickets/get/all"), // Example endpoint for messages
-        ]);
+        const [usersResponse, chapterResponse, messagesResponse] =
+          await Promise.all([
+            api.get("/admins/customers"),
+            api.get("/admins/chapter/"),
+            api.get("/admins/tickets/get/all"),
+          ]);
 
         const chapterData = chapterResponse.data.length;
         const usersData = usersResponse.data.length;
-        // const ordersData = ordersResponse.data.length;
         const messagesData = messagesResponse.data.length;
         const students = usersResponse.data.filter(
           (user) => user.customerType === "STUDENT"
@@ -51,14 +46,15 @@ const AdminDashboard = () => {
         setMessageStats((prevStats) => ({
           ...prevStats,
           totalMessages: messagesData,
-          openTickets: openTickets,
-          closedTickets: closedTickets,
+          openTickets,
+          closedTickets,
         }));
 
         setChapterStats((prevStats) => ({
           ...prevStats,
           totalChapters: chapterData,
         }));
+
         setUserStats((prevStats) => ({
           ...prevStats,
           totalUsers: usersData,
@@ -66,58 +62,73 @@ const AdminDashboard = () => {
           homeoDoctorsCount: homeoDoctors,
           nriDoctorsCount: nriDoctors,
         }));
-
-        console.log(messageStats.data[0].status);
-        // setOrderStats(ordersData);
-        // setMessageStats(messagesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []); // Empty dependency array to ensure API is only called once on component mount
+  }, []);
 
   return (
     <div className="container mt-5 ml-5">
       <div className="row">
-        {/* Cards */}
+        {/* Cards with navigation */}
         <div className="col-sm-12 col-md-6 col-lg-3 mb-4">
-          <ReusableCard
-            title="Users"
-            icon="👤"
-            count={userStats.totalUsers || 0}
-            description="Total Users"
-          />
+          <div
+            onClick={() => navigate("/admin/getallcustomers")}
+            style={{ cursor: "pointer" }}
+          >
+            <ReusableCard
+              title="Users"
+              icon="👤"
+              count={userStats.totalUsers || 0}
+              description="Total Users"
+            />
+          </div>
         </div>
         <div className="col-sm-12 col-md-6 col-lg-3 mb-4">
-          <ReusableCard
-            title="Chapters"
-            icon="📚"
-            count={chapterStats.totalChapters || 0}
-            description="Total Chapters"
-          />
+          <div
+            onClick={() => navigate("/admin/getallchapters")}
+            style={{ cursor: "pointer" }}
+          >
+            <ReusableCard
+              title="Chapters"
+              icon="📚"
+              count={chapterStats.totalChapters || 0}
+              description="Total Chapters"
+            />
+          </div>
         </div>
         <div className="col-sm-12 col-md-6 col-lg-3 mb-4">
-          <ReusableCard
-            title="Orders"
-            icon="🛒"
-            count={orderStats.totalOrders || 0}
-            description="Total Orders"
-          />
+          <div
+            onClick={() => navigate("/admin/order")}
+            style={{ cursor: "pointer" }}
+          >
+            <ReusableCard
+              title="Orders"
+              icon="🛒"
+              count={orderStats.totalOrders || 0}
+              description="Total Orders"
+            />
+          </div>
         </div>
         <div className="col-sm-12 col-md-6 col-lg-3 mb-4">
-          <ReusableCard
-            title="Messages"
-            icon="✉️"
-            count={messageStats.totalMessages || 0}
-            description="Total Messages"
-          />
+          <div
+            onClick={() => navigate("/admin/tickets")}
+            style={{ cursor: "pointer" }}
+          >
+            <ReusableCard
+              title="Messages"
+              icon="✉️"
+              count={messageStats.totalMessages || 0}
+              description="Total Messages"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Pie Charts for users, orders, and messages */}
-
+      {/* Pie Charts */}
       <div className="row mt-5">
         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
           <PieChartComponent
@@ -143,10 +154,7 @@ const AdminDashboard = () => {
           <PieChartComponent
             title="Messages Status"
             data={[
-              {
-                name: "open",
-                value: messageStats.openTickets || 0,
-              },
+              { name: "open", value: messageStats.openTickets || 0 },
               { name: "closed", value: messageStats.closedTickets || 0 },
             ]}
           />

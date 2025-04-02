@@ -478,15 +478,15 @@ export default function Register() {
             {userType === "BHMSStudent" && (
               <div className="row mb-3 justify-content-center">
                 <div className="col-md-5">
-                  <label htmlFor=" Univeristyname" className="form-label">
+                  <label htmlFor=" UniversityName" className="form-label">
                     Univeristy name
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id=" Univeristyname"
-                    name=" univeristyName"
-                    value={formData.univeristyName}
+                    id=" UniverisityName"
+                    name="universityName"
+                    value={formData.universityName}
                     onChange={handleChange}
                     placeholder="Enter your university"
                     required

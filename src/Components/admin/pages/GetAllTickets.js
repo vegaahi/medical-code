@@ -10,9 +10,7 @@ const GetAllTickets = () => {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await api.get(
-          "http://localhost:8080/admins/tickets/get/all"
-        );
+        const response = await api.get("/admins/tickets/get/all");
         setTickets(response.data);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -33,6 +31,18 @@ const GetAllTickets = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+  const formatDateFromArray = (dateArray) => {
+    if (!Array.isArray(dateArray) || dateArray.length < 6)
+      return "Invalid Date"; // Safety check
+
+    let year = dateArray[0]; // First index is year
+    let month = String(dateArray[1]).padStart(2, "0"); // Second index is month (add leading zero)
+    let day = String(dateArray[2]).padStart(2, "0"); // Third index is day (add leading zero)
+    let hour = String(dateArray[3]).padStart(2, "0"); // Fourth index is hours
+    let minute = String(dateArray[4]).padStart(2, "0"); // Fifth index is minutes
+
+    return `${year}-${month}-${day} ${hour}:${minute}`;
   };
 
   if (loading) {
@@ -55,17 +65,19 @@ const GetAllTickets = () => {
           </tr>
         </thead>
         <tbody>
-          {currentTickets.map((ticket) => (
-            <tr key={ticket.id}>
-              <td>{ticket.id}</td>
-              <td>{ticket.customerName}</td>
-              <td>{ticket.email}</td>
-              <td>{ticket.issueDescription}</td>
-              <td>{ticket.priority}</td>
-              <td>{ticket.status}</td>
-              <td>{new Date(ticket.createdAt).toLocaleString()}</td>
-            </tr>
-          ))}
+          {currentTickets.map((ticket) => {
+            return (
+              <tr key={ticket.id}>
+                <td>{ticket.id}</td>
+                <td>{ticket.customerName}</td>
+                <td>{ticket.email}</td>
+                <td>{ticket.issueDescription}</td>
+                <td>{ticket.priority}</td>
+                <td>{ticket.status}</td>
+                <td>{formatDateFromArray(ticket.createdAt)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
